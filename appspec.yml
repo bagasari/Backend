@@ -4,7 +4,7 @@ os: linux
 
 files:
   - source: / #인스턴스에 복사할 디렉터리 경로
-    destination: /home/ubuntu/blog #인스턴스에서 파일이 복사되는 위치
+    destination: /home/ubuntu/sacbagaji #인스턴스에서 파일이 복사되는 위치
     overwrite: yes #파일이 있는경우 대체
 
 #files 섹션에서 복사한 파일에 대한 권한 설정
