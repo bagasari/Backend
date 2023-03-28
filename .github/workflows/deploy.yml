@@ -46,6 +46,14 @@ jobs:
         uses: actions/setup-java@v1
         with:
           java-version: '11'
+          
+      - name: Setup MySQL
+        uses: samin/mysql-action@v1
+        with:
+          character set server: 'utf8'
+          mysql database: 'sacbagaji'
+          mysql user: 'root'
+          mysql password: 'dudqls11@'
       
       # (3) Gradle 권한설정
       - name: Cache Gradle packages
