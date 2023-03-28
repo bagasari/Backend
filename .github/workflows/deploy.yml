@@ -22,8 +22,8 @@ env:
   DB_URL: ${{ secrets.DB_URL }}
   DB_USERNAME: ${{ secrets.DB_USERNAME }}
   DDL_AUTO: ${{ secrets.DDL_AUTO }}
-  EXPIRE_LEN: ${{ secrets.EXPIRE_LEN }}
-  SECRET_KEY: ${{ secrets.SECRET_KEY }}
+  # EXPIRE_LEN: ${{ secrets.EXPIRE_LEN }}
+  # SECRET_KEY: ${{ secrets.SECRET_KEY }}
   SERVER_PORT: ${{ secrets.SERVER_PORT }}
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
