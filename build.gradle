@@ -40,6 +40,9 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	// mockito test
 	testImplementation 'org.mockito:mockito-inline:4.7.0'
+
+	// H2
+	runtimeOnly 'com.h2database:h2'
 }
 
 tasks.named('test') {
