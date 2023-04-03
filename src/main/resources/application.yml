@@ -1,40 +1,89 @@
-server:
-  port: ${SERVER_PORT}
-  servlet:
-    context-path: /
-    encoding:
-      charset: UTF-8
-      enabled: true
-      force: true
+#server:
+#  port: ${SERVER_PORT}
+#  servlet:
+#    context-path: /
+#    encoding:
+#      charset: UTF-8
+#      enabled: true
+#      force: true
+#
+#spring:
+#  mvc:
+#    view:
+#      prefix: /WEB-INF/views/
+#      suffix: .jsp
+#    #throw-exception-if-no-handler-found: true #404?? ??
+#    pathmatch:
+#      matching-strategy: ant_path_matcher #swagger 3.0 ?? ?? ??
+#  datasource:
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: ${DB_URL}
+#    username: ${DB_USERNAME}
+#    password: ${DB_PASSWORD}
+#
+#  jpa:
+#    open-in-view: true
+#    hibernate:
+#      ddl-auto: ${DDL_AUTO}
+#      naming:
+#        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+#      use-new-id-generator-mappings: false
+#    show-sql: true
+#    properties:
+#      hibernate.format_sql: true
+#  jackson:
+#    serialization:
+#      fail-on-empty-beans: false
+#
+##jwt:
+##  secretkey: ${SECRET_KEY}
+##  expirelen: ${EXPIRE_LEN}
 
 spring:
-  mvc:
-    view:
-      prefix: /WEB-INF/views/
-      suffix: .jsp
-    #throw-exception-if-no-handler-found: true #404?? ??
-    pathmatch:
-      matching-strategy: ant_path_matcher #swagger 3.0 ?? ?? ??
+  config:
+    activate:
+      on-profile: local
+
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+  h2:
+    console:
+      enabled: true
+      path: /sbgj
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        hbm2ddl:
+          auto: create-drop
+        show_sql: true
+  datasource:
+    hikari:
+      username: sa
+      jdbc-url: jdbc:h2:tcp://localhost/~/sbgj
+      driver-class-name: org.h2.Driver
+logging:
+  level:
+    org:
+      hibernate.sql: debug
+---
+
+spring:
+  config:
+    activate:
+      on-profile: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
-
+    url: jdbc:mysql://slower-learner-db.cznmvedo4osi.ap-northeast-2.rds.amazonaws.com:3306/slowerlearner
+    username: admin
+    password: hello123
   jpa:
-    open-in-view: true
-    hibernate:
-      ddl-auto: ${DDL_AUTO}
-      naming:
-        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
-      use-new-id-generator-mappings: false
-    show-sql: true
     properties:
-      hibernate.format_sql: true
-  jackson:
-    serialization:
-      fail-on-empty-beans: false
-
-#jwt:
-#  secretkey: ${SECRET_KEY}
-#  expirelen: ${EXPIRE_LEN}
+      hibernate:
+        format_sql: true
+        hbm2ddl:
+          auto: none
+        show_sql: true

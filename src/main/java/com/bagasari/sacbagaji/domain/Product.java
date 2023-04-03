@@ -26,5 +26,6 @@ public class Product {
     private int price;
     private String location;
     private LocalDate purchaseTime;
+    private String content;
 
 }
