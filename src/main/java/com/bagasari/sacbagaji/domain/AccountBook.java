@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,13 +21,18 @@ public class AccountBook {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    private String destination;
+    private String name;
+
+    private LocalDate startDate;
+    private LocalDate endDate;
 
     @Column(name = "is_private")
     private Boolean isPrivate;
+
+    private int totalPrice;
 
     @OneToMany(mappedBy = "accountBook")
     private List<Product> products = new ArrayList<>();
