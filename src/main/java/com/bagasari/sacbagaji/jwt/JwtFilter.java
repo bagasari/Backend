@@ -1,5 +1,6 @@
 package com.bagasari.sacbagaji.jwt;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
@@ -17,17 +18,12 @@ import java.io.IOException;
 /**
  * JWT를 위한 커스텀 필터를 만들기 위한 클래스
  */
+@RequiredArgsConstructor
 public class JwtFilter extends GenericFilterBean {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
-
     public static final String AUTHORIZATION_HEADER = "Authorization";
-
-    private TokenProvider tokenProvider;
-
-    public JwtFilter(TokenProvider tokenProvider) {
-        this.tokenProvider = tokenProvider;
-    }
+    private final TokenProvider tokenProvider;
 
     @Override
     // 실제 필터링 로직
