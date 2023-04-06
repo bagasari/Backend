@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.jwt;
+package com.bagasari.sacbagaji.security.jwt;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

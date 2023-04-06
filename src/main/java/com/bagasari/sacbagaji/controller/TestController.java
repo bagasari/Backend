@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.api.controller;
+package com.bagasari.sacbagaji.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

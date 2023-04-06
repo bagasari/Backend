@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.jwt;
+package com.bagasari.sacbagaji.security.jwt;
 
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;

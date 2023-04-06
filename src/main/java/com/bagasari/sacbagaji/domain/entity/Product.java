@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.domain;
+package com.bagasari.sacbagaji.domain.entity;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;

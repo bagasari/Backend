@@ -1,8 +1,9 @@
-package com.bagasari.sacbagaji.domain;
+package com.bagasari.sacbagaji.domain.entity;
 
 import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -19,6 +20,7 @@ public class User {
     @Column(name = "user_id")
     private int id;
 
+    @Email
     @Column(unique = true, length = 50)
     private String email;
 
@@ -30,7 +32,7 @@ public class User {
 
     private String phone_number;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<AccountBook> accountBooks = new ArrayList<>();
 
     @ManyToMany

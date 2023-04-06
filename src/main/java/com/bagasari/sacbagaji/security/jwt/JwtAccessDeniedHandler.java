@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.jwt;
+package com.bagasari.sacbagaji.security.jwt;
 
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.web.access.AccessDeniedHandler;

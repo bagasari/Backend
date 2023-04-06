@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.api.dto;
+package com.bagasari.sacbagaji.domain.dto.req;
 
 import lombok.*;
 
@@ -10,7 +10,7 @@ import javax.validation.constraints.Size;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
+public class SignInRequestDto {
 
     @NotNull
     @Size(min = 3, max = 50)

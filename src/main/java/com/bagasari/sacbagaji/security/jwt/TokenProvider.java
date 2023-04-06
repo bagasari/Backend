@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.jwt;
+package com.bagasari.sacbagaji.security.jwt;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -50,7 +50,7 @@ public class TokenProvider implements InitializingBean {
     }
 
     // Authentication 객체의 권한정보를 이용해서 토큰을 생성하는 메소드
-    public String createToken(Authentication authentication) {
+    public String generateToken(Authentication authentication) {
         String authorities = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.joining(","));
@@ -63,7 +63,7 @@ public class TokenProvider implements InitializingBean {
         return Jwts.builder()
                 .setSubject(authentication.getName())
                 .claim(AUTHORITIES_KEY, authorities)
-                .signWith(SignatureAlgorithm.HS512, key)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .setExpiration(validity)
                 .compact();
     }
@@ -71,11 +71,7 @@ public class TokenProvider implements InitializingBean {
     // Token을 받아서 Authentication 객체를 리턴하는 메소드
     public Authentication getAuthentication(String token) {
         // 토큰으로 클레임 만들고
-        Claims claims = Jwts
-                .parser()
-                .setSigningKey(key)
-                .parseClaimsJws(token)
-                .getBody();
+        Claims claims = parseClaims(token);
 
         // 클레임으로 권한 정보를 빼내어
         Collection<? extends GrantedAuthority> authorities =
@@ -96,7 +92,7 @@ public class TokenProvider implements InitializingBean {
         // 문제가 있는 경우 false
         // 정상적으로 처리된 경우 true
         try {
-            Jwts.parser().setSigningKey(key).parseClaimsJws(token);
+            Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
             return true;
         } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
             logger.info("잘못된 JWT 서명입니다.");
@@ -108,5 +104,13 @@ public class TokenProvider implements InitializingBean {
             logger.info("JWT 토큰이 잘못되었습니다.");
         }
         return false;
+    }
+
+    private Claims parseClaims(String accessToken) {
+        try {
+            return Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(accessToken).getBody();
+        } catch(ExpiredJwtException e) {
+            return e.getClaims();
+        }
     }
 }

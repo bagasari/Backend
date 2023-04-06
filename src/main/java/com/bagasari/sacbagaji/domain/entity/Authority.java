@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.domain;
+package com.bagasari.sacbagaji.domain.entity;
 
 import lombok.*;
 import javax.persistence.Column;
