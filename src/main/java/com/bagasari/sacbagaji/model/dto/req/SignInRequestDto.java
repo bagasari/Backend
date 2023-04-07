@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.domain.dto.req;
+package com.bagasari.sacbagaji.model.dto.req;
 
 import lombok.*;
 

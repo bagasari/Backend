@@ -1,5 +1,8 @@
-package com.bagasari.sacbagaji.security.jwt;
+package com.bagasari.sacbagaji.config.jwt;
 
+import com.bagasari.sacbagaji.exception.ExceptionHandlerFilter;
+import com.bagasari.sacbagaji.security.jwt.JwtFilter;
+import com.bagasari.sacbagaji.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.config.annotation.SecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -20,6 +23,11 @@ public class JwtSecurityConfig extends SecurityConfigurerAdapter<DefaultSecurity
         http.addFilterBefore(
                 new JwtFilter(tokenProvider),
                 UsernamePasswordAuthenticationFilter.class
+        );
+        //JwtFilter 이전에 예외를 처리 가능한 필터 등록
+        http.addFilterBefore(
+                new ExceptionHandlerFilter(),
+                JwtFilter.class
         );
     }
 }

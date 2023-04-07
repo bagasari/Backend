@@ -1,6 +1,6 @@
 package com.bagasari.sacbagaji.repository;
 
-import com.bagasari.sacbagaji.domain.entity.User;
+import com.bagasari.sacbagaji.model.entity.User;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 

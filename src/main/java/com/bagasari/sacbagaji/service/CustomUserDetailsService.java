@@ -1,7 +1,7 @@
 package com.bagasari.sacbagaji.service;
 
 import com.bagasari.sacbagaji.repository.UserRepository;
-import com.bagasari.sacbagaji.domain.entity.User;
+import com.bagasari.sacbagaji.model.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

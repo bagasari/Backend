@@ -1,5 +1,6 @@
 package com.bagasari.sacbagaji.security.jwt;
 
+import com.bagasari.sacbagaji.exception.security.EmptyJwtTokenException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -40,6 +41,7 @@ public class JwtFilter extends GenericFilterBean {
             logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
         } else {
             logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
+            throw new EmptyJwtTokenException("유효한 JWT 토큰이 없습니다");
         }
 
         filterChain.doFilter(servletRequest, servletResponse);

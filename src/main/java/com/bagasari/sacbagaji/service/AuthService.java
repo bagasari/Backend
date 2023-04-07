@@ -1,17 +1,13 @@
 package com.bagasari.sacbagaji.service;
 
-import com.bagasari.sacbagaji.domain.dto.req.SignInRequestDto;
-import com.bagasari.sacbagaji.domain.dto.req.SignUpRequestDto;
-import com.bagasari.sacbagaji.domain.dto.res.TokenDTO;
-import com.bagasari.sacbagaji.domain.entity.Authority;
-import com.bagasari.sacbagaji.domain.entity.User;
+import com.bagasari.sacbagaji.model.dto.req.SignInRequestDto;
+import com.bagasari.sacbagaji.model.dto.req.SignUpRequestDto;
+import com.bagasari.sacbagaji.model.dto.TokenDTO;
+import com.bagasari.sacbagaji.model.entity.Authority;
+import com.bagasari.sacbagaji.model.entity.User;
 import com.bagasari.sacbagaji.repository.UserRepository;
-import com.bagasari.sacbagaji.security.jwt.JwtFilter;
 import com.bagasari.sacbagaji.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;

@@ -1,8 +1,7 @@
-package com.bagasari.sacbagaji.config;
+package com.bagasari.sacbagaji.config.jwt;
 
 import com.bagasari.sacbagaji.security.jwt.JwtAccessDeniedHandler;
 import com.bagasari.sacbagaji.security.jwt.JwtAuthenticationEntryPoint;
-import com.bagasari.sacbagaji.security.jwt.JwtSecurityConfig;
 import com.bagasari.sacbagaji.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -43,6 +42,7 @@ public class SecurityConfig {
                 .authorizeRequests()
                 // 해당 API에 대해서는 모든 요청을 허가한다는 설정
                 .antMatchers("/v1/auth/**").permitAll()
+                .antMatchers("/v1/test/**").permitAll()
                 // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
                 .anyRequest().authenticated()
 
