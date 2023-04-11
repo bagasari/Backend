@@ -1,5 +1,6 @@
 package com.bagasari.sacbagaji.service;
 
+import com.bagasari.sacbagaji.exception.auth.UserExistsException;
 import com.bagasari.sacbagaji.model.dto.req.SignInRequestDto;
 import com.bagasari.sacbagaji.model.dto.req.SignUpRequestDto;
 import com.bagasari.sacbagaji.model.dto.TokenDTO;
@@ -33,7 +34,7 @@ public class AuthService {
     @Transactional
     public void signUp(SignUpRequestDto signUpRequestDto) {
         if (userRepository.findOneWithAuthoritiesByEmail(signUpRequestDto.getEmail()).orElse(null) != null) {
-            throw new RuntimeException("이미 가입되어 있는 유저입니다.");
+            throw new UserExistsException("이미 가입되어 있는 유저입니다.");
         }
 
         Authority authority = Authority.builder()
