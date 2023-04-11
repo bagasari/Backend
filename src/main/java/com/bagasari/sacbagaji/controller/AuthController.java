@@ -26,7 +26,7 @@ public class AuthController {
     @PostMapping("/signUp")
     public ResponseEntity<Void> signup(@Valid @RequestBody SignUpRequestDto dto) {
         authService.signUp(dto);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @PostMapping("/signIn")
