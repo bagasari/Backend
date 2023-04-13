@@ -67,7 +67,8 @@ public class SecurityConfig {
             @Override
             public void customize(WebSecurity web) {
                 web.ignoring().antMatchers(
-                    "/v1/auth/**"
+                    "/v1/auth/**",
+                        "/error"
                 );
             }
         };
