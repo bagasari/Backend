@@ -24,19 +24,18 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<Void> signup(@Valid @RequestBody SignUpRequestDto dto) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignUpRequestDto dto) {
         authService.signUp(dto);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok("sign up success!");
     }
 
     @PostMapping("/signIn")
-    public ResponseEntity<TokenDTO> signIn(@Valid @RequestBody SignInRequestDto dto) {
+    public ResponseEntity<TokenDTO> signIn(@Valid @RequestBody SignInRequestDto dto, HttpServletResponse response) {
         TokenDTO tokenDTO = authService.signIn(dto);
 
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenDTO.getToken());
+        response.setHeader(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenDTO.getToken());
 
-        return new ResponseEntity<>(tokenDTO, httpHeaders, HttpStatus.OK);
+        return ResponseEntity.ok(tokenDTO);
     }
 
     @GetMapping("/hello")
