@@ -57,7 +57,6 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
 
-        // authenticate 실행될 때 CustomUserDetailsService 클래스의 loadUserByUsername 메소드 실행하여
         // Authentication 객체 생성
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 

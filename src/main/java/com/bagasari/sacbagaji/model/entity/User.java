@@ -30,8 +30,6 @@ public class User {
     @Column(length = 50)
     private String name;
 
-    private String phone_number;
-
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<AccountBook> accountBooks = new ArrayList<>();
 

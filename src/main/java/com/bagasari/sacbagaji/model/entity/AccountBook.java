@@ -1,17 +1,21 @@
 package com.bagasari.sacbagaji.model.entity;
 
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Getter
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Builder
 @Table(name = "account_book")
 public class AccountBook {
 
@@ -32,8 +36,19 @@ public class AccountBook {
     @Column(name = "is_private")
     private Boolean isPrivate;
 
-    private int totalPrice;
+    private Integer totalPrice;
+
+    @CreationTimestamp
+    @Column(name = "create_time")
+    private LocalDateTime createTime;
+
+    @UpdateTimestamp
+    @Column(name = "update_time")
+    private LocalDateTime updateTime;
 
     @OneToMany(mappedBy = "accountBook")
     private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accountBook")
+    private List<Destination> cities = new ArrayList<>();
 }
