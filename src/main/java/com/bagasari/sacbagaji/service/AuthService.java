@@ -1,9 +1,9 @@
 package com.bagasari.sacbagaji.service;
 
 import com.bagasari.sacbagaji.exception.auth.UserExistsException;
-import com.bagasari.sacbagaji.model.dto.req.SignInRequestDto;
-import com.bagasari.sacbagaji.model.dto.req.SignUpRequestDto;
-import com.bagasari.sacbagaji.model.dto.TokenDTO;
+import com.bagasari.sacbagaji.model.dto.req.SignInRequestDTO;
+import com.bagasari.sacbagaji.model.dto.req.SignUpRequestDTO;
+import com.bagasari.sacbagaji.model.dto.res.TokenDTO;
 import com.bagasari.sacbagaji.model.entity.Authority;
 import com.bagasari.sacbagaji.model.entity.User;
 import com.bagasari.sacbagaji.repository.UserRepository;
@@ -32,7 +32,7 @@ public class AuthService {
      * 회원가입 서비스 로직
      */
     @Transactional
-    public void signUp(SignUpRequestDto signUpRequestDto) {
+    public void signUp(SignUpRequestDTO signUpRequestDto) {
         if (userRepository.findOneWithAuthoritiesByEmail(signUpRequestDto.getEmail()).orElse(null) != null) {
             throw new UserExistsException("이미 가입되어 있는 유저입니다.");
         }
@@ -52,7 +52,7 @@ public class AuthService {
     }
 
     @Transactional
-    public TokenDTO signIn(SignInRequestDto dto) {
+    public TokenDTO signIn(SignInRequestDTO dto) {
         // AuthenticationToken 객체 생성
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
