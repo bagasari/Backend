@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,6 +35,14 @@ public class AccountBook {
 
     private int totalPrice;
 
+    @Column(name = "create_time")
+    private LocalDateTime createTime;
+    @Column(name = "update_time")
+    private LocalDateTime updateTime;
+
     @OneToMany(mappedBy = "accountBook")
     private List<Product> products = new ArrayList<>();
+
+    @OneToMany(mappedBy = "accountBook")
+    private List<Destination> cities = new ArrayList<>();
 }

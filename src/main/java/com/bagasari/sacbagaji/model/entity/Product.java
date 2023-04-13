@@ -25,7 +25,12 @@ public class Product {
     private String name;
     private int price;
     private String location;
-    private LocalDate purchaseTime;
+
+    @Column(name = "purchase_date")
+    private LocalDate purchaseDate;
+
     private String content;
+    private String country;
+    private String city;
 
 }
