@@ -45,10 +45,4 @@ public class AccountBook {
     @UpdateTimestamp
     @Column(name = "update_time")
     private LocalDateTime updateTime;
-
-    @OneToMany(mappedBy = "accountBook")
-    private List<Product> products = new ArrayList<>();
-
-    @OneToMany(mappedBy = "accountBook")
-    private List<Destination> cities = new ArrayList<>();
 }

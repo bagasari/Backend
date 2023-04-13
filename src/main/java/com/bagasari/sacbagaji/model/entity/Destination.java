@@ -22,6 +22,6 @@ public class Destination {
     private AccountBook accountBook;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "city_id")
+    @JoinColumn(name = "city_name")
     private City city;
 }

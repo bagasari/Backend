@@ -8,21 +8,19 @@ import javax.persistence.*;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "city")
-@Builder
-@AllArgsConstructor
 public class City {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "city_id")
-    private Long id;
+    @Column(name = "city_name")
+    private String name;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "country_id")
+    @JoinColumn(name = "country_name")
     private Country country;
 
-    private String name;
-    private Long count;
+//    private Long count;
 
-
+    public City(String name) {
+        this.name = name;
+    }
 }

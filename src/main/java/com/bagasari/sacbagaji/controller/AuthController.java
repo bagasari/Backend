@@ -1,13 +1,11 @@
 package com.bagasari.sacbagaji.controller;
 
-import com.bagasari.sacbagaji.model.dto.req.SignInRequestDto;
-import com.bagasari.sacbagaji.model.dto.TokenDTO;
-import com.bagasari.sacbagaji.model.dto.req.SignUpRequestDto;
+import com.bagasari.sacbagaji.model.dto.req.SignInRequestDTO;
+import com.bagasari.sacbagaji.model.dto.res.TokenDTO;
+import com.bagasari.sacbagaji.model.dto.req.SignUpRequestDTO;
 import com.bagasari.sacbagaji.security.jwt.JwtFilter;
 import com.bagasari.sacbagaji.service.AuthService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +22,13 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signUp")
-    public ResponseEntity<String> signup(@Valid @RequestBody SignUpRequestDto dto) {
+    public ResponseEntity<String> signup(@Valid @RequestBody SignUpRequestDTO dto) {
         authService.signUp(dto);
         return ResponseEntity.ok("sign up success!");
     }
 
     @PostMapping("/signIn")
-    public ResponseEntity<TokenDTO> signIn(@Valid @RequestBody SignInRequestDto dto, HttpServletResponse response) {
+    public ResponseEntity<TokenDTO> signIn(@Valid @RequestBody SignInRequestDTO dto, HttpServletResponse response) {
         TokenDTO tokenDTO = authService.signIn(dto);
 
         response.setHeader(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenDTO.getToken());
