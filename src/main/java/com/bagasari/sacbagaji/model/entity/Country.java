@@ -15,12 +15,9 @@ import java.util.List;
 public class Country {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "country_id")
-    private Long id;
+    @Column(name = "country_name")
     private String name;
-    private Long count;
 
-    @OneToMany(mappedBy = "country")
-    private List<City> cities = new ArrayList<>();
+//    private Long count;
+
 }
