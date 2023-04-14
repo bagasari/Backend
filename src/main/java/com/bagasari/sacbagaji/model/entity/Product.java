@@ -23,13 +23,12 @@ public class Product {
     private AccountBook accountBook;
 
     private String name;
-    private int price;
-    private String location;
+    private Integer price;
 
     @Column(name = "purchase_date")
     private LocalDate purchaseDate;
 
-    private String content;
+    private String detail;
     private String country;
     private String city;
 

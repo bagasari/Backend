@@ -17,8 +17,8 @@ public class Food extends Product{
     @Column(name = "food_id")
     private Long id;
 
-    private int count;
-    private int weight;
+    private Integer count;
+    private Integer weight;
     private String latitude;
     private String longitude;
 }

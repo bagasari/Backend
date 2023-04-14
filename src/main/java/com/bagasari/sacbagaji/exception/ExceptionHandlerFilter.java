@@ -1,5 +1,6 @@
 package com.bagasari.sacbagaji.exception;
 
+import com.bagasari.sacbagaji.exception.response.ErrorResponse;
 import com.bagasari.sacbagaji.exception.security.EmptyJwtTokenException;
 import com.bagasari.sacbagaji.exception.security.InvalidTokenException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -13,7 +14,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.time.LocalDateTime;
 
 @Component
 public class ExceptionHandlerFilter extends OncePerRequestFilter {
@@ -24,11 +24,10 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             filterChain.doFilter(request, response);
-        } catch (InvalidTokenException | EmptyJwtTokenException e) {
-            setErrorResponse(
-                    HttpStatus.BAD_REQUEST,
-                    request, response, e.getMessage()
-            );
+        } catch (InvalidTokenException e) {
+            setErrorResponse(HttpStatus.BAD_REQUEST, request, response, e.getMessage(), e.getErrorCode());
+        } catch (EmptyJwtTokenException e) {
+            setErrorResponse(HttpStatus.BAD_REQUEST, request, response, e.getMessage(), e.getErrorCode());
         }
     }
 
@@ -36,15 +35,16 @@ public class ExceptionHandlerFilter extends OncePerRequestFilter {
             HttpStatus status,
             HttpServletRequest request,
             HttpServletResponse response,
-            String exceptionMessage
+            String exceptionMessage,
+            ErrorCode errorCode
             ) {
         objectMapper.registerModule(new JavaTimeModule());
         response.setStatus(status.value());
         response.setContentType("application/json");
         ErrorResponse errorResponse = new ErrorResponse(
-                LocalDateTime.now(),
-                HttpStatus.BAD_REQUEST.toString(),
-                exceptionMessage, request.getRequestURI()
+                errorCode,
+                exceptionMessage,
+                request.getRequestURI()
         );
         try {
             response.setCharacterEncoding("UTF-8");

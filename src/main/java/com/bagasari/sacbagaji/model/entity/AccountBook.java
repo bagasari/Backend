@@ -3,7 +3,6 @@ package com.bagasari.sacbagaji.model.entity;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -45,4 +44,7 @@ public class AccountBook {
     @UpdateTimestamp
     @Column(name = "update_time")
     private LocalDateTime updateTime;
+
+    @OneToMany(mappedBy = "accountBook")
+    private List<Destination> destinations = new ArrayList<>();
 }
