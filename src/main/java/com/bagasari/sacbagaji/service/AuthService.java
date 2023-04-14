@@ -10,6 +10,7 @@ import com.bagasari.sacbagaji.model.entity.User;
 import com.bagasari.sacbagaji.repository.UserRepository;
 import com.bagasari.sacbagaji.security.jwt.TokenProvider;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -58,13 +60,22 @@ public class AuthService {
         UsernamePasswordAuthenticationToken authenticationToken =
                 new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
 
-        // Authentication 객체 생성
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        try {
+            // Authentication 객체 생성
+            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        // authentication 객체를 SecurityContext에 저장
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+            // authentication 객체를 SecurityContext에 저장
+            SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        // 인증 정보를 기반으로 jwt 토큰 생성하여 리턴
-        return new TokenDTO(tokenProvider.generateToken(authentication));
+            // 인증 정보를 기반으로 jwt 토큰 생성하여 리턴
+            return new TokenDTO(tokenProvider.generateToken(authentication));
+        } catch (BadCredentialsException e) {
+            Optional<User> user = userRepository.findByEmail(dto.getEmail());
+            if (user.isEmpty()) {
+                throw new CustomException(ErrorCode.BAD_CREDENTIAL_NONEXISTENT_ID);
+            } else {
+                throw new CustomException(ErrorCode.BAD_CREDENTIAL_INVALID_PWD);
+            }
+        }
     }
 }
