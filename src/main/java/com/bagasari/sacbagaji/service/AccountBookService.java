@@ -1,13 +1,15 @@
 package com.bagasari.sacbagaji.service;
 
+import com.bagasari.sacbagaji.exception.CustomException;
+import com.bagasari.sacbagaji.exception.ErrorCode;
 import com.bagasari.sacbagaji.model.dto.req.AccountRequestDTO;
+import com.bagasari.sacbagaji.model.dto.req.FoodRequestDTO;
+import com.bagasari.sacbagaji.model.dto.req.TransportationRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AccountResponseDTO;
-import com.bagasari.sacbagaji.model.entity.AccountBook;
-import com.bagasari.sacbagaji.model.entity.City;
-import com.bagasari.sacbagaji.model.entity.Destination;
-import com.bagasari.sacbagaji.model.entity.User;
+import com.bagasari.sacbagaji.model.entity.*;
 import com.bagasari.sacbagaji.repository.AccountBookRepository;
 import com.bagasari.sacbagaji.repository.DestinationRepository;
+import com.bagasari.sacbagaji.repository.ProductRepository;
 import com.bagasari.sacbagaji.repository.UserRepository;
 import com.bagasari.sacbagaji.security.AuthInfo;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,6 +27,7 @@ public class AccountBookService {
     private final AccountBookRepository accountBookRepository;
     private final UserRepository userRepository;
     private final DestinationRepository destinationRepository;
+    private final ProductRepository productRepository;
 
     /**
      * 가계부 생성 서비스 로직
@@ -63,7 +67,7 @@ public class AccountBookService {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
 
-        List<AccountBook> accountBooks = accountBookRepository.findAll();
+        List<AccountBook> accountBooks = accountBookRepository.findAllByUserId(user.getId());
 
         List<AccountResponseDTO> list = accountBooks
                 .stream()
@@ -73,4 +77,44 @@ public class AccountBookService {
 
         return list;
     }
+
+    /**
+     * 가계부 지출내역 생성 (먹거리)
+     */
+    public void createFoodProduct(AuthInfo authInfo, FoodRequestDTO foodRequestDTO) {
+
+        User user = userRepository.findByEmail(authInfo.getEmail()).get();
+
+        Optional<AccountBook> optionalAccountBook = accountBookRepository.findById(foodRequestDTO.getProduct().getAccountBookId());
+
+        if (optionalAccountBook.isEmpty()) {
+            throw new CustomException(ErrorCode.NONEXISTENT_ACCOUNT_ID);
+        } else if (optionalAccountBook.get().getUser().getId() != user.getId()) {
+            throw new CustomException(ErrorCode.INVALID_ACCESS_ACCOUNT);
+        }
+
+        Food food = new Food(foodRequestDTO.getProduct(), optionalAccountBook.get(), foodRequestDTO.getFood());
+
+        productRepository.save(food);
+
+    }
+
+    public void createTransportationProduct(AuthInfo authInfo, TransportationRequestDTO transportationRequestDTO) {
+
+        User user = userRepository.findByEmail(authInfo.getEmail()).get();
+
+        Optional<AccountBook> optionalAccountBook = accountBookRepository.findById(transportationRequestDTO.getProduct().getAccountBookId());
+
+        if (optionalAccountBook.isEmpty()) {
+            throw new CustomException(ErrorCode.NONEXISTENT_ACCOUNT_ID);
+        } else if (optionalAccountBook.get().getUser().getId() != user.getId()) {
+            throw new CustomException(ErrorCode.INVALID_ACCESS_ACCOUNT);
+        }
+
+        Transportation transportation = new Transportation(transportationRequestDTO.getProduct(), optionalAccountBook.get(), transportationRequestDTO.getTransportation());
+
+        productRepository.save(transportation);
+    }
 }
+
+

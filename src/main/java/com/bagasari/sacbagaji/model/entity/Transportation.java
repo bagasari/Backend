@@ -1,5 +1,7 @@
 package com.bagasari.sacbagaji.model.entity;
 
+import com.bagasari.sacbagaji.model.dto.req.ProductDTO;
+import com.bagasari.sacbagaji.model.dto.req.TransportationDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,11 +14,6 @@ import javax.persistence.*;
 @Table(name = "transportation")
 public class Transportation extends Product {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "transportation_id")
-    private Long id;
-
     private String startLatitude;
     private String startLongitude;
     private String endLatitude;
@@ -24,4 +21,13 @@ public class Transportation extends Product {
 
     @Enumerated(value = EnumType.STRING)
     private TransportType transportType;
+
+    public Transportation(ProductDTO productDTO, AccountBook accountBook, TransportationDTO transportationDTO) {
+        super(productDTO, accountBook);
+        this.startLatitude = transportationDTO.getStartLatitude();
+        this.startLongitude = transportationDTO.getStartLongitude();
+        this.endLatitude = transportationDTO.getEndLatitude();
+        this.endLongitude = transportationDTO.getEndLongitude();
+        this.transportType = transportationDTO.getTransportType();
+    }
 }

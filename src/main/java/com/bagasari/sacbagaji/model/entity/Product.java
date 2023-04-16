@@ -1,6 +1,9 @@
 package com.bagasari.sacbagaji.model.entity;
 
+import com.bagasari.sacbagaji.model.dto.req.ProductDTO;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
@@ -11,6 +14,8 @@ import java.time.LocalDate;
 @DiscriminatorColumn
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
+@AllArgsConstructor
+@Builder
 public class Product {
 
     @Id
@@ -32,4 +37,13 @@ public class Product {
     private String country;
     private String city;
 
+    public Product(ProductDTO productDTO, AccountBook accountBook) {
+        this.accountBook = accountBook;
+        this.name = productDTO.getName();
+        this.price = productDTO.getPrice();
+        this.purchaseDate = productDTO.getPurchaseDate();
+        this.detail = productDTO.getDetail();
+        this.country = productDTO.getCountry();
+        this.city = productDTO.getCity();
+    }
 }
