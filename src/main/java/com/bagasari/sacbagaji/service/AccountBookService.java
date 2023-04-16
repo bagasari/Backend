@@ -4,6 +4,7 @@ import com.bagasari.sacbagaji.exception.CustomException;
 import com.bagasari.sacbagaji.exception.ErrorCode;
 import com.bagasari.sacbagaji.model.dto.req.AccountRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.FoodRequestDTO;
+import com.bagasari.sacbagaji.model.dto.req.TransportationRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AccountResponseDTO;
 import com.bagasari.sacbagaji.model.entity.*;
 import com.bagasari.sacbagaji.repository.AccountBookRepository;
@@ -66,7 +67,7 @@ public class AccountBookService {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
 
-        List<AccountBook> accountBooks = accountBookRepository.findAll();
+        List<AccountBook> accountBooks = accountBookRepository.findAllByUserId(user.getId());
 
         List<AccountResponseDTO> list = accountBooks
                 .stream()
@@ -88,12 +89,31 @@ public class AccountBookService {
 
         if (optionalAccountBook.isEmpty()) {
             throw new CustomException(ErrorCode.NONEXISTENT_ACCOUNT_ID);
+        } else if (optionalAccountBook.get().getUser().getId() != user.getId()) {
+            throw new CustomException(ErrorCode.INVALID_ACCESS_ACCOUNT);
         }
 
         Food food = new Food(foodRequestDTO.getProduct(), optionalAccountBook.get(), foodRequestDTO.getFood());
 
         productRepository.save(food);
 
+    }
+
+    public void createTransportationProduct(AuthInfo authInfo, TransportationRequestDTO transportationRequestDTO) {
+
+        User user = userRepository.findByEmail(authInfo.getEmail()).get();
+
+        Optional<AccountBook> optionalAccountBook = accountBookRepository.findById(transportationRequestDTO.getProduct().getAccountBookId());
+
+        if (optionalAccountBook.isEmpty()) {
+            throw new CustomException(ErrorCode.NONEXISTENT_ACCOUNT_ID);
+        } else if (optionalAccountBook.get().getUser().getId() != user.getId()) {
+            throw new CustomException(ErrorCode.INVALID_ACCESS_ACCOUNT);
+        }
+
+        Transportation transportation = new Transportation(transportationRequestDTO.getProduct(), optionalAccountBook.get(), transportationRequestDTO.getTransportation());
+
+        productRepository.save(transportation);
     }
 }
 

@@ -2,6 +2,8 @@ package com.bagasari.sacbagaji.controller;
 
 import com.bagasari.sacbagaji.model.dto.req.AccountRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.FoodRequestDTO;
+import com.bagasari.sacbagaji.model.dto.req.TransportationDTO;
+import com.bagasari.sacbagaji.model.dto.req.TransportationRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AccountResponseDTO;
 import com.bagasari.sacbagaji.security.Auth;
 import com.bagasari.sacbagaji.security.AuthInfo;
@@ -33,7 +35,12 @@ public class AccountBookController {
     @PostMapping("/product/food")
     public ResponseEntity<String> createFoodProduct(@Auth AuthInfo authInfo, @RequestBody FoodRequestDTO foodRequestDTO) {
         accountBookService.createFoodProduct(authInfo, foodRequestDTO);
-        return ResponseEntity.ok("FoodProduct create!!");
+        return ResponseEntity.ok("Food Product create!!");
     }
 
+    @PostMapping("/product/transport")
+    public ResponseEntity<String> createTransportationProduct(@Auth AuthInfo authInfo, @RequestBody TransportationRequestDTO transportationRequestDTO) {
+        accountBookService.createTransportationProduct(authInfo, transportationRequestDTO);
+        return ResponseEntity.ok("Transportation Product create!!");
+    }
 }
