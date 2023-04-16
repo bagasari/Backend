@@ -1,6 +1,7 @@
 package com.bagasari.sacbagaji.controller;
 
 import com.bagasari.sacbagaji.model.dto.req.AccountRequestDTO;
+import com.bagasari.sacbagaji.model.dto.req.FoodRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AccountResponseDTO;
 import com.bagasari.sacbagaji.security.Auth;
 import com.bagasari.sacbagaji.security.AuthInfo;
@@ -28,4 +29,11 @@ public class AccountBookController {
     public ResponseEntity<List<AccountResponseDTO>> findList(@Auth AuthInfo authInfo) {
         return ResponseEntity.ok(accountBookService.findList(authInfo));
     }
+
+    @PostMapping("/product/food")
+    public ResponseEntity<String> createFoodProduct(@Auth AuthInfo authInfo, @RequestBody FoodRequestDTO foodRequestDTO) {
+        accountBookService.createFoodProduct(authInfo, foodRequestDTO);
+        return ResponseEntity.ok("FoodProduct create!!");
+    }
+
 }
