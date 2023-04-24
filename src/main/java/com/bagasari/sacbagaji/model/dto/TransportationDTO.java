@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.model.dto.req;
+package com.bagasari.sacbagaji.model.dto;
 
 import com.bagasari.sacbagaji.model.entity.TransportType;
 import lombok.Getter;

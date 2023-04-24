@@ -1,11 +1,13 @@
-package com.bagasari.sacbagaji.model.dto.req;
+package com.bagasari.sacbagaji.model.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class ProductDTO {
 

@@ -1,5 +1,7 @@
 package com.bagasari.sacbagaji.model.dto.req;
 
+import com.bagasari.sacbagaji.model.dto.ProductDTO;
+import com.bagasari.sacbagaji.model.dto.TransportationDTO;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,7 +1,7 @@
 package com.bagasari.sacbagaji.model.entity;
 
-import com.bagasari.sacbagaji.model.dto.req.FoodDTO;
-import com.bagasari.sacbagaji.model.dto.req.ProductDTO;
+import com.bagasari.sacbagaji.model.dto.FoodDTO;
+import com.bagasari.sacbagaji.model.dto.ProductDTO;
 import lombok.*;
 
 import javax.persistence.*;

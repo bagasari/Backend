@@ -1,7 +1,7 @@
 package com.bagasari.sacbagaji.model.entity;
 
-import com.bagasari.sacbagaji.model.dto.req.ProductDTO;
-import com.bagasari.sacbagaji.model.dto.req.TransportationDTO;
+import com.bagasari.sacbagaji.model.dto.ProductDTO;
+import com.bagasari.sacbagaji.model.dto.TransportationDTO;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

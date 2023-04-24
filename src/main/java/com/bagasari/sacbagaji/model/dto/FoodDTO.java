@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.model.dto.req;
+package com.bagasari.sacbagaji.model.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
