@@ -18,7 +18,7 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @RequestMapping("/v1/auth")
 public class AuthController {
-    ;
+
     private final AuthService authService;
 
     @PostMapping("/signUp")
