@@ -14,6 +14,7 @@ public enum ErrorCode {
     // JWT
     EMPTY_JWT_TOKEN(400, "B001", "JWT 토큰이 없습니다."),
     INVALID_TOKEN(400, "B002", "유효하지 않은 토큰입니다."),
+    CANT_REFRESH_TOKEN(400, "B003", "JWT 토큰을 재발급 받을 수 없습니다."),
     // 가계부
     NONEXISTENT_ACCOUNT_ID(400, "C001", "존재하지 않는 가계부 입니다."),
     INVALID_ACCESS_ACCOUNT(400, "C002", "유저가 생성한 가계부가 아닙니다.");

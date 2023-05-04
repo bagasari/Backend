@@ -1,8 +1,11 @@
 package com.bagasari.sacbagaji.controller;
 
+import com.bagasari.sacbagaji.model.dto.req.RefreshRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.SignInRequestDTO;
-import com.bagasari.sacbagaji.model.dto.res.TokenDTO;
+import com.bagasari.sacbagaji.model.dto.TokenDTO;
 import com.bagasari.sacbagaji.model.dto.req.SignUpRequestDTO;
+import com.bagasari.sacbagaji.repository.AuthorityRepository;
+import com.bagasari.sacbagaji.repository.UserRepository;
 import com.bagasari.sacbagaji.security.jwt.JwtFilter;
 import com.bagasari.sacbagaji.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +23,7 @@ import java.io.IOException;
 public class AuthController {
 
     private final AuthService authService;
+    private final UserRepository userRepository;
 
     @PostMapping("/signUp")
     public ResponseEntity<String> signup(@Valid @RequestBody SignUpRequestDTO dto) {
@@ -31,10 +35,22 @@ public class AuthController {
     public ResponseEntity<TokenDTO> signIn(@Valid @RequestBody SignInRequestDTO dto, HttpServletResponse response) {
         TokenDTO tokenDTO = authService.signIn(dto);
 
-        response.setHeader(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenDTO.getToken());
+//        response.setHeader(JwtFilter.AUTHORIZATION_HEADER, "Bearer " + tokenDTO.getToken());
 
         return ResponseEntity.ok(tokenDTO);
     }
+
+    @PostMapping("/refresh")
+    public ResponseEntity<TokenDTO> refresh(@Valid @RequestBody RefreshRequestDTO dto) {
+        TokenDTO token = authService.refresh(dto);
+
+
+
+        return ResponseEntity.ok(token);
+    }
+
+
+
 
     @GetMapping("/hello")
     public ResponseEntity<String> hello() {

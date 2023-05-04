@@ -31,7 +31,8 @@ public class TokenProvider implements InitializingBean {
     private static final String AUTHORITIES_KEY = "auth";
 
     private final String secret;
-    private final long tokenValidityInMilliseconds;
+    private final long accessTokenValidityInMilliseconds;
+    private final long refreshTokenValidityInMilliseconds;
 
     private Key key;
 
@@ -40,7 +41,8 @@ public class TokenProvider implements InitializingBean {
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.accessTokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.refreshTokenValidityInMilliseconds = tokenValidityInSeconds * 10000;
     }
 
     // 빈이 생성되고 의존성 주입을 받은 후에 주입받은 secret 값을 Base64 Decode해서 Key 변수에 할당
@@ -50,22 +52,27 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Authentication 객체의 권한정보를 이용해서 토큰을 생성하는 메소드
-    public String generateToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+    public String generateAccessToken(String email) {
+        return generateToken(email, accessTokenValidityInMilliseconds);
+    }
 
+    public String generateRefreshToken(String email) {
+        return generateToken(email, refreshTokenValidityInMilliseconds);
+    }
+
+    // Authentication 객체의 권한정보를 이용해서 토큰을 생성하는 메소드
+    private String generateToken(String email, Long tokenValidityInMilliseconds) {
         // application.yml에서 설정했던 만료시간 설정
         long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Date validity = new Date(now + tokenValidityInMilliseconds);
 
         // 토큰 생성하고 리턴
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .claim("email", email)
+//                .claim(AUTHORITIES_KEY, authorities)
+                .setIssuedAt(new Date())
                 .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -116,5 +123,9 @@ public class TokenProvider implements InitializingBean {
         } catch(ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    public String getUserEmailFromToken(String token) {
+        return getAuthentication(token).getName();
     }
 }
