@@ -1,6 +1,10 @@
 package com.bagasari.sacbagaji.security.jwt;
 
+import com.bagasari.sacbagaji.exception.CustomException;
+import com.bagasari.sacbagaji.exception.ErrorCode;
 import com.bagasari.sacbagaji.exception.security.InvalidTokenException;
+import com.bagasari.sacbagaji.model.entity.Authority;
+import com.bagasari.sacbagaji.security.Auth;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -19,6 +23,7 @@ import java.security.Key;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -28,10 +33,10 @@ import java.util.stream.Collectors;
 public class TokenProvider implements InitializingBean {
 
     private final Logger logger = LoggerFactory.getLogger(TokenProvider.class);
-    private static final String AUTHORITIES_KEY = "auth";
 
     private final String secret;
-    private final long tokenValidityInMilliseconds;
+    private final long accessTokenValidityInMilliseconds;
+    private final long refreshTokenValidityInMilliseconds;
 
     private Key key;
 
@@ -40,7 +45,8 @@ public class TokenProvider implements InitializingBean {
             @Value("${jwt.secret}") String secret,
             @Value("${jwt.token-validity-in-seconds}") long tokenValidityInSeconds) {
         this.secret = secret;
-        this.tokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.accessTokenValidityInMilliseconds = tokenValidityInSeconds * 1000;
+        this.refreshTokenValidityInMilliseconds = tokenValidityInSeconds * 10000;
     }
 
     // 빈이 생성되고 의존성 주입을 받은 후에 주입받은 secret 값을 Base64 Decode해서 Key 변수에 할당
@@ -50,22 +56,27 @@ public class TokenProvider implements InitializingBean {
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    // Authentication 객체의 권한정보를 이용해서 토큰을 생성하는 메소드
-    public String generateToken(Authentication authentication) {
-        String authorities = authentication.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+    public String generateAccessToken(String email, Set<Authority> authorities) {
+        return generateToken(email, authorities, accessTokenValidityInMilliseconds);
+    }
 
+    public String generateRefreshToken(String email, Set<Authority> authorities) {
+        return generateToken(email, authorities, refreshTokenValidityInMilliseconds);
+    }
+
+    // Authentication 객체의 권한정보를 이용해서 토큰을 생성하는 메소드
+    private String generateToken(String email, Set<Authority> authorities, Long tokenValidityInMilliseconds) {
         // application.yml에서 설정했던 만료시간 설정
         long now = (new Date()).getTime();
-        Date validity = new Date(now + this.tokenValidityInMilliseconds);
+        Date validity = new Date(now + tokenValidityInMilliseconds);
 
         // 토큰 생성하고 리턴
         return Jwts.builder()
-                .setSubject(authentication.getName())
-                .claim(AUTHORITIES_KEY, authorities)
-                .signWith(key, SignatureAlgorithm.HS512)
+                .claim("email", email)
+                .claim("roles", authorities)
+                .setIssuedAt(new Date())
                 .setExpiration(validity)
+                .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
@@ -74,17 +85,19 @@ public class TokenProvider implements InitializingBean {
         // 토큰으로 클레임 만들고
         Claims claims = parseClaims(token);
 
+        if(claims.get("email")==null || claims.get("roles")==null) throw new CustomException(ErrorCode.INVALID_TOKEN);
+
         // 클레임으로 권한 정보를 빼내어
         Collection<? extends GrantedAuthority> authorities =
-                Arrays.stream(claims.get(AUTHORITIES_KEY).toString().split(","))
+                Arrays.stream(claims.get("roles").toString().split(","))
                         .map(SimpleGrantedAuthority::new)
                         .collect(Collectors.toList());
 
         // 권한 정보들을 이용해서 유저 객체를 만들고
-        User principal = new User(claims.getSubject(), "", authorities);
+        User principal = new User((String) claims.get("email"), "", authorities);
 
         // Authentication 객체 리턴
-        return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+        return new UsernamePasswordAuthenticationToken(principal, "", principal.getAuthorities());
     }
 
     // 토큰의 유효성 검증을 수행하는 메소드
@@ -116,5 +129,9 @@ public class TokenProvider implements InitializingBean {
         } catch(ExpiredJwtException e) {
             return e.getClaims();
         }
+    }
+
+    public String getUserEmailFromToken(String token) {
+        return getAuthentication(token).getName();
     }
 }

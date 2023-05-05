@@ -1,10 +1,7 @@
 package com.bagasari.sacbagaji.model.entity;
 
-import com.bagasari.sacbagaji.model.dto.req.ProductDTO;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import com.bagasari.sacbagaji.model.dto.ProductDTO;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -15,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
 @AllArgsConstructor
+@Getter
 @Builder
 public class Product {
 

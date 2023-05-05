@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.model.dto.res;
+package com.bagasari.sacbagaji.model.dto;
 
 import lombok.*;
 
@@ -9,6 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 public class TokenDTO {
 
-    private String token;
+    private String accessToken;
+    private String refreshToken;
 
 }

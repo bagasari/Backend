@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -30,6 +31,9 @@ public class User {
     @Column(length = 50)
     private String name;
 
+    @Column
+    private String refreshToken;
+
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<AccountBook> accountBooks = new ArrayList<>();
 
@@ -40,4 +44,8 @@ public class User {
             inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
     private Set<Authority> authorities;
 
+
+    public void renewRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
 }

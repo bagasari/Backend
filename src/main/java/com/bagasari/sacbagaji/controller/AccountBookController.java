@@ -2,7 +2,6 @@ package com.bagasari.sacbagaji.controller;
 
 import com.bagasari.sacbagaji.model.dto.req.AccountRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.FoodRequestDTO;
-import com.bagasari.sacbagaji.model.dto.req.TransportationDTO;
 import com.bagasari.sacbagaji.model.dto.req.TransportationRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AccountResponseDTO;
 import com.bagasari.sacbagaji.security.Auth;

@@ -2,9 +2,10 @@ package com.bagasari.sacbagaji.service;
 
 import com.bagasari.sacbagaji.exception.CustomException;
 import com.bagasari.sacbagaji.exception.ErrorCode;
+import com.bagasari.sacbagaji.model.dto.req.RefreshRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.SignInRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.SignUpRequestDTO;
-import com.bagasari.sacbagaji.model.dto.res.TokenDTO;
+import com.bagasari.sacbagaji.model.dto.TokenDTO;
 import com.bagasari.sacbagaji.model.entity.Authority;
 import com.bagasari.sacbagaji.model.entity.User;
 import com.bagasari.sacbagaji.repository.UserRepository;
@@ -56,26 +57,28 @@ public class AuthService {
 
     @Transactional
     public TokenDTO signIn(SignInRequestDTO dto) {
-        // AuthenticationToken 객체 생성
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(dto.getEmail(), dto.getPassword());
+        User user = userRepository.findByEmail(dto.getEmail())
+                .orElseThrow(()->new CustomException(ErrorCode.BAD_CREDENTIAL_NONEXISTENT_ID));
+        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())) throw new CustomException(ErrorCode.BAD_CREDENTIAL_INVALID_PWD);
 
-        try {
-            // Authentication 객체 생성
-            Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+        // 인증 정보를 기반으로 jwt access, refresh토큰 생성하여 리턴
+        String accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getAuthorities());
+        String refreshToken = tokenProvider.generateRefreshToken(user.getEmail(), user.getAuthorities());
 
-            // authentication 객체를 SecurityContext에 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        user.renewRefreshToken(refreshToken);
 
-            // 인증 정보를 기반으로 jwt 토큰 생성하여 리턴
-            return new TokenDTO(tokenProvider.generateToken(authentication));
-        } catch (BadCredentialsException e) {
-            Optional<User> user = userRepository.findByEmail(dto.getEmail());
-            if (user.isEmpty()) {
-                throw new CustomException(ErrorCode.BAD_CREDENTIAL_NONEXISTENT_ID);
-            } else {
-                throw new CustomException(ErrorCode.BAD_CREDENTIAL_INVALID_PWD);
-            }
-        }
+        return new TokenDTO(accessToken, refreshToken);
+    }
+
+    @Transactional
+    public TokenDTO refresh(RefreshRequestDTO dto) {
+        String email = tokenProvider.getUserEmailFromToken(dto.getRefreshToken());
+
+        User user = userRepository.findByEmailAndRefreshToken(email, dto.getRefreshToken()).orElseThrow(() -> new CustomException(ErrorCode.CANT_REFRESH_TOKEN));
+
+        String accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getAuthorities());
+        String refreshToken = tokenProvider.generateRefreshToken(user.getEmail(), user.getAuthorities());
+
+        return new TokenDTO(accessToken, refreshToken);
     }
 }
