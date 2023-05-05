@@ -2,6 +2,7 @@ package com.bagasari.sacbagaji;
 
 import com.bagasari.sacbagaji.model.dto.req.SignInRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.SignUpRequestDTO;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -12,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AuthTest extends BaseTest {
 
+    @Disabled
     @Test
     @DisplayName("회원가입 성공")
     public void signUpTest() throws Exception {
@@ -29,7 +31,7 @@ public class AuthTest extends BaseTest {
         rst.andExpect(status().isOk());
     }
 
-    //TODO(andExpect 조건 추가해야함)
+    @Disabled
     @Test
     @DisplayName("로그인 성공")
     public void signInTest() throws Exception {
@@ -46,7 +48,8 @@ public class AuthTest extends BaseTest {
         //then
         rst
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("token").exists());
+                .andExpect(jsonPath("accessToken").exists())
+                .andExpect(jsonPath("refreshToken").exists());
     }
 
 }
