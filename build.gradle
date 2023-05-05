@@ -61,8 +61,7 @@ dependencies {
 	implementation "com.querydsl:querydsl-jpa:${queryDslVersion}"
 	implementation "com.querydsl:querydsl-apt:${queryDslVersion}"
 
-	//swagger 3.0
-	implementation group: 'io.springfox', name: 'springfox-boot-starter', version: '3.0.0'
+	implementation 'org.springdoc:springdoc-openapi-ui:1.6.15' // swagger
 }
 
 tasks.named('test') {

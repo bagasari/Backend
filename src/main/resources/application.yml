@@ -39,3 +39,15 @@ jwt:
   header: Authorization
   secret: c2FjYmFnYWppLXNwcmluZy1ib290LXNlY3VyaXR5LWp3dC1zZWNyZXQtdmFsdWUteWltLWd3YWsta2ltLWplb24tNC0xLWplb24tam9uZy1zdXJsLTEK
   token-validity-in-seconds: 86400
+
+# swagger setting
+springdoc:
+  swagger-ui:
+    path: /api-docs
+    disable-swagger-default-url: true
+    display-request-duration: true
+    operations-sorter: alpha # 정렬 기준
+  default-consumes-media-type: application/json
+  default-produces-media-type: application/json
+  paths-to-match:
+    - /**
