@@ -1,5 +1,7 @@
 package com.bagasari.sacbagaji.security.jwt;
 
+import com.bagasari.sacbagaji.exception.CustomException;
+import com.bagasari.sacbagaji.exception.ErrorCode;
 import com.bagasari.sacbagaji.exception.security.EmptyJwtTokenException;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -36,9 +38,9 @@ public class JwtFilter extends GenericFilterBean {
 
         // 유효성 검증하여 올바른 토큰인 경우
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
-//            Authentication authentication = tokenProvider.getAuthentication(jwt); // 토큰에서 Authentication 객체를 받아와서
-//            SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContext에 저장
-//            logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+            Authentication authentication = tokenProvider.getAuthentication(jwt); // 토큰에서 Authentication 객체를 받아와서
+            SecurityContextHolder.getContext().setAuthentication(authentication); // SecurityContext에 저장
+            logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
         } else {
             logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
             throw new EmptyJwtTokenException("유효한 JWT 토큰이 없습니다");
@@ -54,7 +56,6 @@ public class JwtFilter extends GenericFilterBean {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
-
-        return null;
+        else throw new CustomException(ErrorCode.EMPTY_JWT_TOKEN);
     }
 }

@@ -59,23 +59,15 @@ public class AuthService {
     public TokenDTO signIn(SignInRequestDTO dto) {
         User user = userRepository.findByEmail(dto.getEmail())
                 .orElseThrow(()->new CustomException(ErrorCode.BAD_CREDENTIAL_NONEXISTENT_ID));
+        if(!passwordEncoder.matches(dto.getPassword(), user.getPassword())) throw new CustomException(ErrorCode.BAD_CREDENTIAL_INVALID_PWD);
 
-        try {
-            // 인증 정보를 기반으로 jwt access, refresh토큰 생성하여 리턴
-            String accessToken = tokenProvider.generateAccessToken(dto.getEmail());
-            String refreshToken = tokenProvider.generateRefreshToken(dto.getEmail());
+        // 인증 정보를 기반으로 jwt access, refresh토큰 생성하여 리턴
+        String accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getAuthorities());
+        String refreshToken = tokenProvider.generateRefreshToken(user.getEmail(), user.getAuthorities());
 
-            user.renewRefreshToken(refreshToken);
+        user.renewRefreshToken(refreshToken);
 
-            return new TokenDTO(accessToken, refreshToken);
-        } catch (BadCredentialsException e) {
-            Optional<User> userop = userRepository.findByEmail(dto.getEmail());
-            if (userop.isEmpty()) {
-                throw new CustomException(ErrorCode.BAD_CREDENTIAL_NONEXISTENT_ID);
-            } else {
-                throw new CustomException(ErrorCode.BAD_CREDENTIAL_INVALID_PWD);
-            }
-        }
+        return new TokenDTO(accessToken, refreshToken);
     }
 
     @Transactional
@@ -84,13 +76,8 @@ public class AuthService {
 
         User user = userRepository.findByEmailAndRefreshToken(email, dto.getRefreshToken()).orElseThrow(() -> new CustomException(ErrorCode.CANT_REFRESH_TOKEN));
 
-        UsernamePasswordAuthenticationToken authenticationToken =
-                new UsernamePasswordAuthenticationToken(user.getEmail(), user.getPassword());
-
-        Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-
-        String accessToken = tokenProvider.generateAccessToken(email);
-        String refreshToken = tokenProvider.generateRefreshToken(email);
+        String accessToken = tokenProvider.generateAccessToken(user.getEmail(), user.getAuthorities());
+        String refreshToken = tokenProvider.generateRefreshToken(user.getEmail(), user.getAuthorities());
 
         return new TokenDTO(accessToken, refreshToken);
     }
