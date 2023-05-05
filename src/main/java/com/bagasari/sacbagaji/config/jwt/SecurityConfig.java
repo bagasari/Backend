@@ -8,7 +8,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -43,8 +42,7 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 // 해당 API에 대해서는 모든 요청을 허가한다는 설정
-                .antMatchers("/v1/auth/**").permitAll()
-                .antMatchers("/v1/test/**").permitAll()
+//                .antMatchers("").permitAll()
                 // 이 밖에 모든 요청에 대해서 인증을 필요로 한다는 설정
                 .anyRequest().authenticated()
 
@@ -63,14 +61,13 @@ public class SecurityConfig {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return new WebSecurityCustomizer() {
-            @Override
-            public void customize(WebSecurity web) {
-                web.ignoring().antMatchers(
-                    "/v1/auth/**",
-                        "/error"
-                );
-            }
-        };
+        return web -> web.ignoring().antMatchers(
+                "/v1/auth/**",
+                "/v3/api-docs/**",
+                "/swagger-resources/**",
+                "/swagger-ui/**",
+                "/swagger/**",
+                "/error"
+        );
     }
 }

@@ -9,20 +9,19 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.util.StringUtils;
-import org.springframework.web.filter.GenericFilterBean;
+import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 /**
  * JWT를 위한 커스텀 필터를 만들기 위한 클래스
  */
 @RequiredArgsConstructor
-public class JwtFilter extends GenericFilterBean {
+public class JwtFilter extends OncePerRequestFilter {
 
     private static final Logger logger = LoggerFactory.getLogger(JwtFilter.class);
     public static final String AUTHORIZATION_HEADER = "Authorization";
@@ -31,10 +30,13 @@ public class JwtFilter extends GenericFilterBean {
     @Override
     // 실제 필터링 로직
     // JWT 토큰의 인증정보를 현재 실행중인 SecurityContext에 저장하는 메소드
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException, ServletException {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-        String jwt = resolveToken(httpServletRequest); // request에서 토큰을 받아서
-        String requestURI = httpServletRequest.getRequestURI();
+    public void doFilterInternal(HttpServletRequest servletRequest,
+                                 HttpServletResponse servletResponse,
+                                 FilterChain filterChain
+    ) throws IOException, ServletException {
+
+        String jwt = resolveToken(servletRequest); // request에서 토큰을 받아서
+        String requestURI = (servletRequest).getRequestURI();
 
         // 유효성 검증하여 올바른 토큰인 경우
         if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
@@ -52,6 +54,7 @@ public class JwtFilter extends GenericFilterBean {
     // 필터링을 하기 위해 필요한 토큰 정보를 Request Header에서 꺼내오는 메소드
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+        System.out.println("TTTTTTTTTTTTTT:"+bearerToken);
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
