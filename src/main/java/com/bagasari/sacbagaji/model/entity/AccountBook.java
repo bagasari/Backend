@@ -47,4 +47,15 @@ public class AccountBook {
 
     @OneToMany(mappedBy = "accountBook")
     private List<Destination> destinations = new ArrayList<>();
+
+    public void updateTotalPrice(AccountBook accountBook, Integer totalPrice) {
+        this.id = accountBook.getId();
+        this.user = accountBook.getUser();
+        this.name = accountBook.getName();
+        this.startDate = accountBook.getStartDate();
+        this.endDate = accountBook.getEndDate();
+        this.isPrivate = accountBook.getIsPrivate();
+        this.totalPrice = totalPrice;
+        this.createTime = accountBook.getCreateTime();
+    }
 }
