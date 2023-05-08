@@ -10,7 +10,7 @@ import java.util.List;
 
 @Getter
 @NoArgsConstructor
-public class CurrentAccountResponseDTO {
+public class AccountProductListResponseDTO {
 
     private String name;
     private LocalDate startDate;
@@ -18,7 +18,7 @@ public class CurrentAccountResponseDTO {
     private Integer totalPrice;
     private List<ProductListWithPurchaseDateDTO> products;
 
-    public CurrentAccountResponseDTO(AccountBook accountBook, List<ProductListWithPurchaseDateDTO> products) {
+    public AccountProductListResponseDTO(AccountBook accountBook, List<ProductListWithPurchaseDateDTO> products) {
         this.name = accountBook.getName();
         this.startDate = accountBook.getStartDate();
         this.endDate = accountBook.getEndDate();

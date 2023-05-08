@@ -8,7 +8,7 @@ import com.bagasari.sacbagaji.model.dto.req.AccountRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.FoodRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.TransportationRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AccountResponseDTO;
-import com.bagasari.sacbagaji.model.dto.res.CurrentAccountResponseDTO;
+import com.bagasari.sacbagaji.model.dto.res.AccountProductListResponseDTO;
 import com.bagasari.sacbagaji.model.entity.*;
 import com.bagasari.sacbagaji.repository.AccountBookRepository;
 import com.bagasari.sacbagaji.repository.DestinationRepository;
@@ -130,7 +130,7 @@ public class AccountBookService {
         accountBookRepository.save(accountBook);
     }
 
-    public CurrentAccountResponseDTO findCurAccount(AuthInfo authInfo) {
+    public AccountProductListResponseDTO findCurAccountProductList(AuthInfo authInfo) {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
 
@@ -152,8 +152,51 @@ public class AccountBookService {
             productListWithPurchaseDateDTOS.add(new ProductListWithPurchaseDateDTO(entry.getKey(), entry.getValue()));
         }
 
-        return new CurrentAccountResponseDTO(accountBook, productListWithPurchaseDateDTOS);
+        return new AccountProductListResponseDTO(accountBook, productListWithPurchaseDateDTOS);
 
+    }
+
+    public AccountProductListResponseDTO findAccountProductList(AuthInfo authInfo, Long id) {
+
+        User user = userRepository.findByEmail(authInfo.getEmail()).get();
+
+        Optional<AccountBook> accountBookOptional = accountBookRepository.findById(id);
+
+        if (accountBookOptional.isEmpty()) {
+            throw new CustomException(ErrorCode.NONEXISTENT_ACCOUNT_ID);
+        } else if (user.getId() != accountBookOptional.get().getUser().getId()) {
+            throw new CustomException(ErrorCode.INVALID_ACCESS_ACCOUNT);
+        }
+
+        AccountBook accountBook = accountBookOptional.get();
+
+        List<Product> products = productRepository.findOrderByPurchaseDate(id);
+
+        List<ProductListWithPurchaseDateDTO> productListWithPurchaseDateDTOS = new ArrayList<>();
+
+        Map<LocalDate, List<ProductDTO>> productsByPurchaseDate = new HashMap<>();
+
+        // purchaseDate별로 product 분류
+        for (Product product : products) {
+            productsByPurchaseDate.computeIfAbsent(product.getPurchaseDate(), k -> new ArrayList<>())
+                    .add(new ProductDTO(product.getName(), product.getPrice(), product.getCity(), getProductType(product)));
+        }
+
+        for (Map.Entry<LocalDate, List<ProductDTO>> entry : productsByPurchaseDate.entrySet()) {
+            productListWithPurchaseDateDTOS.add(new ProductListWithPurchaseDateDTO(entry.getKey(), entry.getValue()));
+        }
+
+        return new AccountProductListResponseDTO(accountBook, productListWithPurchaseDateDTOS);
+    }
+
+    private String getProductType(Product product) {
+        if (product instanceof Food) {
+            return "Food";
+        } else if (product instanceof Transportation) {
+            return "Transportation";
+        } else {
+            throw new CustomException(ErrorCode.INVALID_PRODUCT_TYPE);
+        }
     }
 }
 

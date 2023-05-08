@@ -4,7 +4,7 @@ import com.bagasari.sacbagaji.model.dto.req.AccountRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.FoodRequestDTO;
 import com.bagasari.sacbagaji.model.dto.req.TransportationRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AccountResponseDTO;
-import com.bagasari.sacbagaji.model.dto.res.CurrentAccountResponseDTO;
+import com.bagasari.sacbagaji.model.dto.res.AccountProductListResponseDTO;
 import com.bagasari.sacbagaji.security.Auth;
 import com.bagasari.sacbagaji.security.AuthInfo;
 import com.bagasari.sacbagaji.service.AccountBookService;
@@ -45,9 +45,13 @@ public class AccountBookController {
     }
 
     @GetMapping("/current")
-    public ResponseEntity<CurrentAccountResponseDTO> findCurAccount(@Auth AuthInfo authInfo) {
-        return ResponseEntity.ok(accountBookService.findCurAccount(authInfo));
+    public ResponseEntity<AccountProductListResponseDTO> findCurAccountProductList(@Auth AuthInfo authInfo) {
+        return ResponseEntity.ok(accountBookService.findCurAccountProductList(authInfo));
     }
 
+    @GetMapping("")
+    public ResponseEntity<AccountProductListResponseDTO> findAccountProductList(@Auth AuthInfo authInfo, @RequestParam(name = "accountId") Long id) {
+        return ResponseEntity.ok(accountBookService.findAccountProductList(authInfo, id));
+    }
 
 }
