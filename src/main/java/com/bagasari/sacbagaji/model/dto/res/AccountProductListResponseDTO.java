@@ -2,6 +2,7 @@ package com.bagasari.sacbagaji.model.dto.res;
 
 import com.bagasari.sacbagaji.model.dto.ProductListWithPurchaseDateDTO;
 import com.bagasari.sacbagaji.model.entity.AccountBook;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,8 +14,13 @@ import java.util.List;
 public class AccountProductListResponseDTO {
 
     private String name;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate startDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate endDate;
+
     private Integer totalPrice;
     private List<ProductListWithPurchaseDateDTO> products;
 

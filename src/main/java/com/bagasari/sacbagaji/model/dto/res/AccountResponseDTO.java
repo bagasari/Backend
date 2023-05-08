@@ -1,6 +1,7 @@
 package com.bagasari.sacbagaji.model.dto.res;
 
 import com.bagasari.sacbagaji.model.entity.AccountBook;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,8 +13,13 @@ public class AccountResponseDTO {
 
     private Long id;
     private String name;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate startDate;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate endDate;
+
     private String city;
 
     public AccountResponseDTO(AccountBook accountBook) {
