@@ -136,11 +136,11 @@ public class AccountBookService {
 
         AccountBook accountBook = accountBookRepository.findFirstByOrderByUpdateTimeDesc(user.getEmail());
 
-        List<Product> products = productRepository.findOrderByPurchaseDate(accountBook.getId());
+        List<Product> products = productRepository.findAllByAccountBookId(accountBook.getId());
 
         List<ProductListWithPurchaseDateDTO> productListWithPurchaseDateDTOS = new ArrayList<>();
 
-        Map<LocalDate, List<ProductDTO>> productsByPurchaseDate = new HashMap<>();
+        Map<LocalDate, List<ProductDTO>> productsByPurchaseDate = new TreeMap<>();
 
         // purchaseDate별로 product 분류
         for (Product product : products) {
@@ -170,11 +170,11 @@ public class AccountBookService {
 
         AccountBook accountBook = accountBookOptional.get();
 
-        List<Product> products = productRepository.findOrderByPurchaseDate(id);
+        List<Product> products = productRepository.findAllByAccountBookId(id);
 
         List<ProductListWithPurchaseDateDTO> productListWithPurchaseDateDTOS = new ArrayList<>();
 
-        Map<LocalDate, List<ProductDTO>> productsByPurchaseDate = new HashMap<>();
+        Map<LocalDate, List<ProductDTO>> productsByPurchaseDate = new TreeMap<>();
 
         // purchaseDate별로 product 분류
         for (Product product : products) {

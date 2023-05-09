@@ -22,13 +22,13 @@ public class AccountProductListResponseDTO {
     private LocalDate endDate;
 
     private Integer totalPrice;
-    private List<ProductListWithPurchaseDateDTO> products;
+    private List<ProductListWithPurchaseDateDTO> productsByDate;
 
     public AccountProductListResponseDTO(AccountBook accountBook, List<ProductListWithPurchaseDateDTO> products) {
         this.name = accountBook.getName();
         this.startDate = accountBook.getStartDate();
         this.endDate = accountBook.getEndDate();
         this.totalPrice = accountBook.getTotalPrice();
-        this.products = products;
+        this.productsByDate = products;
     }
 }
