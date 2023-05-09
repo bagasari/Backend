@@ -1,17 +1,18 @@
 package com.bagasari.sacbagaji.model.dto.res;
 
+import com.bagasari.sacbagaji.model.dto.ProductListWithPurchaseDateDTO;
 import com.bagasari.sacbagaji.model.entity.AccountBook;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
-@NoArgsConstructor
 @Getter
-public class AccountResponseDTO {
+@NoArgsConstructor
+public class AccountProductListResponseDTO {
 
-    private Long id;
     private String name;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
@@ -20,13 +21,14 @@ public class AccountResponseDTO {
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private LocalDate endDate;
 
-    private String city;
+    private Integer totalPrice;
+    private List<ProductListWithPurchaseDateDTO> productsByDate;
 
-    public AccountResponseDTO(AccountBook accountBook) {
-        this.id = accountBook.getId();
+    public AccountProductListResponseDTO(AccountBook accountBook, List<ProductListWithPurchaseDateDTO> products) {
         this.name = accountBook.getName();
         this.startDate = accountBook.getStartDate();
         this.endDate = accountBook.getEndDate();
-        this.city = accountBook.getDestinations().get(0).getCity().getName();
+        this.totalPrice = accountBook.getTotalPrice();
+        this.productsByDate = products;
     }
 }
