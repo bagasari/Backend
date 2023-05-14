@@ -49,6 +49,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	// mockito test
 	testImplementation 'org.mockito:mockito-inline:4.7.0'
+	testImplementation 'com.h2database:h2'
 
 	/**jwt */
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.11.5'

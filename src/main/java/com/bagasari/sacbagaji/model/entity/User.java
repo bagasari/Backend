@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "user")
+@Table(name = "users")
 @Getter
 @AllArgsConstructor
 @Builder
