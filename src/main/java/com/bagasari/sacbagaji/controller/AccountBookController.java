@@ -16,7 +16,7 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("v1/account")
+@RequestMapping("/v1/account")
 public class AccountBookController {
 
     private final AccountBookService accountBookService;
