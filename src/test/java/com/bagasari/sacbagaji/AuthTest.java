@@ -13,7 +13,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 public class AuthTest extends BaseTest {
 
-    @Disabled
     @Test
     @DisplayName("회원가입 성공")
     public void signUpTest() throws Exception {
@@ -31,7 +30,6 @@ public class AuthTest extends BaseTest {
         rst.andExpect(status().isOk());
     }
 
-    @Disabled
     @Test
     @DisplayName("로그인 성공")
     public void signInTest() throws Exception {
