@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,7 @@ public class AccountBookController {
     private final AccountBookService accountBookService;
 
     @PostMapping("/create")
-    public ResponseEntity<String> create(@Auth AuthInfo authInfo, @RequestBody AccountRequestDTO accountRequestDto) {
+    public ResponseEntity<String> create(@Auth AuthInfo authInfo, @Valid @RequestBody AccountRequestDTO accountRequestDto) {
         accountBookService.create(authInfo, accountRequestDto);
         return ResponseEntity.ok("AccountBook create!!");
     }
@@ -33,13 +34,13 @@ public class AccountBookController {
     }
 
     @PostMapping("/product/food")
-    public ResponseEntity<String> createFoodProduct(@Auth AuthInfo authInfo, @RequestBody FoodRequestDTO foodRequestDTO) {
+    public ResponseEntity<String> createFoodProduct(@Auth AuthInfo authInfo, @Valid @RequestBody FoodRequestDTO foodRequestDTO) {
         accountBookService.createFoodProduct(authInfo, foodRequestDTO);
         return ResponseEntity.ok("Food Product create!!");
     }
 
     @PostMapping("/product/transport")
-    public ResponseEntity<String> createTransportationProduct(@Auth AuthInfo authInfo, @RequestBody TransportationRequestDTO transportationRequestDTO) {
+    public ResponseEntity<String> createTransportationProduct(@Auth AuthInfo authInfo, @Valid @RequestBody TransportationRequestDTO transportationRequestDTO) {
         accountBookService.createTransportationProduct(authInfo, transportationRequestDTO);
         return ResponseEntity.ok("Transportation Product create!!");
     }
@@ -49,7 +50,7 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.findCurAccountProductList(authInfo));
     }
 
-    @GetMapping("")
+    @GetMapping
     public ResponseEntity<AccountProductListResponseDTO> findAccountProductList(@Auth AuthInfo authInfo, @RequestParam(name = "accountId") Long id) {
         return ResponseEntity.ok(accountBookService.findAccountProductList(authInfo, id));
     }

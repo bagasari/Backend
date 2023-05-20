@@ -2,6 +2,7 @@ package com.bagasari.sacbagaji.model.entity;
 
 import com.bagasari.sacbagaji.model.dto.ProductDTO;
 import com.bagasari.sacbagaji.model.dto.TransportationDTO;
+import com.bagasari.sacbagaji.model.enums.TransportType;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

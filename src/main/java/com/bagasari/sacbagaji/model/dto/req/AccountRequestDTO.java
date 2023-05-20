@@ -1,11 +1,9 @@
 package com.bagasari.sacbagaji.model.dto.req;
 
-import com.bagasari.sacbagaji.model.entity.City;
-import com.bagasari.sacbagaji.model.entity.Country;
-import com.bagasari.sacbagaji.model.entity.Destination;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -13,7 +11,9 @@ import java.util.List;
 @NoArgsConstructor
 public class AccountRequestDTO {
 
+    @NotBlank
     private String name;
+
     private LocalDate startDate;
     private LocalDate endDate;
     private Boolean isPrivate;

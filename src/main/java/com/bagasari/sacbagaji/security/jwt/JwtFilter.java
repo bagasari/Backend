@@ -54,7 +54,6 @@ public class JwtFilter extends OncePerRequestFilter {
     // 필터링을 하기 위해 필요한 토큰 정보를 Request Header에서 꺼내오는 메소드
     private String resolveToken(HttpServletRequest request) {
         String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
-        System.out.println("TTTTTTTTTTTTTT:"+bearerToken);
 
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
