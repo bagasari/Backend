@@ -5,16 +5,17 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @DiscriminatorColumn
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "product")
+@Table(name = "products")
 @AllArgsConstructor
 @Getter
-@Builder
-public class Product {
+public abstract class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +35,10 @@ public class Product {
     private String detail;
     private String country;
     private String city;
+    private Long likeCount;
+
+    @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
+    private List<ProductLike> productLikes = new ArrayList<>();
 
     public Product(ProductDTO productDTO, AccountBook accountBook) {
         this.accountBook = accountBook;
@@ -43,5 +48,10 @@ public class Product {
         this.detail = productDTO.getDetail();
         this.country = productDTO.getCountry();
         this.city = productDTO.getCity();
+        this.likeCount = 0L;
+    }
+
+    public void updateLike(Long like) {
+        this.likeCount += like;
     }
 }

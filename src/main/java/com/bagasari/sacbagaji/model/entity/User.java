@@ -37,6 +37,9 @@ public class User {
     @OneToMany(mappedBy = "user", orphanRemoval = true)
     private List<AccountBook> accountBooks = new ArrayList<>();
 
+    @OneToMany(mappedBy = "user", orphanRemoval = true)
+    private List<ProductLike> productLikes = new ArrayList<>();
+
     @ManyToMany
     @JoinTable(
             name = "user_authority",

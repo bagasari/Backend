@@ -1,6 +1,6 @@
 package com.bagasari.sacbagaji.model.dto;
 
-import com.bagasari.sacbagaji.model.entity.TransportType;
+import com.bagasari.sacbagaji.model.enums.TransportType;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

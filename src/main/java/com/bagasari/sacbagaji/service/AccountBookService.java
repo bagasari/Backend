@@ -17,6 +17,7 @@ import com.bagasari.sacbagaji.repository.UserRepository;
 import com.bagasari.sacbagaji.security.AuthInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -34,6 +35,7 @@ public class AccountBookService {
     /**
      * 가계부 생성 서비스 로직
      */
+    @Transactional
     public void create(AuthInfo authInfo, AccountRequestDTO accountRequestDTO) {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
@@ -65,6 +67,7 @@ public class AccountBookService {
     /**
      * 가계부 리스트 서비스 로직
      */
+    @Transactional
     public List<AccountResponseDTO> findList(AuthInfo authInfo) {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
@@ -83,6 +86,7 @@ public class AccountBookService {
     /**
      * 가계부 지출내역 생성 (먹거리)
      */
+    @Transactional
     public void createFoodProduct(AuthInfo authInfo, FoodRequestDTO foodRequestDTO) {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
@@ -107,6 +111,7 @@ public class AccountBookService {
 
     }
 
+    @Transactional
     public void createTransportationProduct(AuthInfo authInfo, TransportationRequestDTO transportationRequestDTO) {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
@@ -130,6 +135,7 @@ public class AccountBookService {
         accountBookRepository.save(accountBook);
     }
 
+    @Transactional
     public AccountProductListResponseDTO findCurAccountProductList(AuthInfo authInfo) {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
@@ -156,6 +162,7 @@ public class AccountBookService {
 
     }
 
+    @Transactional
     public AccountProductListResponseDTO findAccountProductList(AuthInfo authInfo, Long id) {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
