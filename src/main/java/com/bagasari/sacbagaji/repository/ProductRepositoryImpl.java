@@ -2,6 +2,7 @@ package com.bagasari.sacbagaji.repository;
 
 import com.bagasari.sacbagaji.model.dto.ProductDTO;
 import com.bagasari.sacbagaji.model.entity.Product;
+import com.bagasari.sacbagaji.model.entity.QProduct;
 import com.bagasari.sacbagaji.util.QueryDslUtil;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -97,5 +98,19 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
 
         return orderSpecifierList;
+    }
+
+    public List<String> findNameListOrderByProductNameAsc(String word) {
+
+        QProduct qp = product;
+
+        return queryFactory
+                .select(qp.name)
+                .from(qp)
+                .where(qp.name.contains(word))
+                .orderBy(qp.name.asc())
+                .distinct()
+                .limit(5)
+                .fetch();
     }
 }
