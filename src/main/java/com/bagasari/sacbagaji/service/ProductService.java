@@ -3,6 +3,7 @@ package com.bagasari.sacbagaji.service;
 import com.bagasari.sacbagaji.exception.CustomException;
 import com.bagasari.sacbagaji.exception.ErrorCode;
 import com.bagasari.sacbagaji.model.dto.ProductDTO;
+import com.bagasari.sacbagaji.model.dto.res.AutoSearchWordListResponseDTO;
 import com.bagasari.sacbagaji.model.entity.Product;
 import com.bagasari.sacbagaji.model.entity.ProductLike;
 import com.bagasari.sacbagaji.model.entity.User;
@@ -10,11 +11,15 @@ import com.bagasari.sacbagaji.repository.ProductLikeRepository;
 import com.bagasari.sacbagaji.repository.ProductRepository;
 import com.bagasari.sacbagaji.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class ProductService {
@@ -55,5 +60,14 @@ public class ProductService {
         productLikeRepository.deleteByUserAndProduct(user, product);
 
         product.updateLike(-1L);
+    }
+
+    @Transactional
+    public AutoSearchWordListResponseDTO selectAutoSearchWordList(String word) {
+        log.info(word);
+        List<String> names = productRepository.findNameListOrderByProductNameAsc(word);
+        log.info(names.toString());
+        AutoSearchWordListResponseDTO result = new AutoSearchWordListResponseDTO(names);
+        return result;
     }
 }

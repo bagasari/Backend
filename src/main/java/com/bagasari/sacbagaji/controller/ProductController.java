@@ -2,6 +2,7 @@ package com.bagasari.sacbagaji.controller;
 
 import com.bagasari.sacbagaji.model.dto.ProductDTO;
 import com.bagasari.sacbagaji.model.dto.req.ProductLikeDTO;
+import com.bagasari.sacbagaji.model.dto.res.AutoSearchWordListResponseDTO;
 import com.bagasari.sacbagaji.security.Auth;
 import com.bagasari.sacbagaji.security.AuthInfo;
 import com.bagasari.sacbagaji.service.ProductService;
@@ -49,6 +50,11 @@ public class ProductController {
     public ResponseEntity<String> dislikeProduct(@Auth AuthInfo authInfo, @Valid @RequestBody ProductLikeDTO dto) {
         productService.dislikeProduct(authInfo.getEmail(), dto.getProductId());
         return ResponseEntity.ok("product dislike success");
+    }
+
+    @GetMapping("/search/auto")
+    public ResponseEntity<AutoSearchWordListResponseDTO> selectAutoSearchWordList(@RequestParam(name = "word") String word) {
+        return ResponseEntity.ok(productService.selectAutoSearchWordList(word));
     }
 
 }
