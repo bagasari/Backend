@@ -23,21 +23,23 @@ public class ProductController {
 
     private final ProductService productService;
 
+    private final int PAGESIZE = 20;
+
     /**
      * @param keyword: 검색 키워드
-     * @param sort: 정렬 조건
-     * @param size: 한번에 나오는 product 개수
+     * @param location: 검색 국가/도시
+     * @param sort: 정렬 조건 (id: 최신순, like: 좋아요순)
      * @param lastId: 마지막으로 조회한 product id. lastId+1부터 조회됨. 처음에는 null을 넘겨줌
      */
     @GetMapping("/search")
     public ResponseEntity<Slice<ProductDTO>> searchProduct(
-            @RequestParam String keyword,
+            @RequestParam(required = false) String keyword,
+            @RequestParam String location,
             @RequestParam String sort,
-            @RequestParam int size,
             @RequestParam(required = false) Long lastId
     ) {
-        Pageable pageable = PageRequest.of(0, size, Sort.by(sort).descending());
-        return ResponseEntity.ok(productService.searchProduct(keyword, pageable, lastId));
+        Pageable pageable = PageRequest.of(0, PAGESIZE, Sort.by(sort).descending());
+        return ResponseEntity.ok(productService.searchProduct(keyword, location, pageable, lastId));
     }
 
     @PostMapping("/like")

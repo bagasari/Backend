@@ -29,8 +29,8 @@ public class ProductService {
     private final UserRepository userRepository;
 
     @Transactional
-    public Slice<ProductDTO> searchProduct(String keyword, Pageable pageable, Long lastId) {
-        return productRepository.findAllByNameOrderBySort(keyword, pageable, lastId);
+    public Slice<ProductDTO> searchProduct(String keyword, String location, Pageable pageable, Long lastId) {
+        return productRepository.findAllByNameAndLocationOrderBySort(keyword, location, pageable, lastId);
     }
 
     @Transactional

@@ -26,14 +26,15 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     //추천순, 최근순
-    public Slice<ProductDTO> findAllByNameOrderBySort(String keyword, Pageable pageable, Long lastId) {
+    public Slice<ProductDTO> findAllByNameAndLocationOrderBySort(String keyword, String location, Pageable pageable, Long lastId) {
 
         List<OrderSpecifier> orderSpecifiers = getAllOrderSpecifiers(pageable);
 
         List<Product> productList = queryFactory.selectFrom(product)
                 .where(
                         ltId(lastId),
-                        product.name.contains(keyword)
+                        containsKeyword(keyword),
+                        product.country.contains(location).or(product.city.contains(location))
                 )
                 .limit(pageable.getPageSize()+1) //요청 크기보다 +1로 조회하여 다음 페이지가 존재하는지 확인
                 .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
@@ -72,6 +73,13 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
         }
 
         return product.id.lt(id);
+    }
+
+    private BooleanExpression containsKeyword(String keyword) {
+        if(keyword == null) {
+            return null;
+        }
+        return product.name.contains(keyword);
     }
 
     private List<OrderSpecifier> getAllOrderSpecifiers(Pageable pageable) {
