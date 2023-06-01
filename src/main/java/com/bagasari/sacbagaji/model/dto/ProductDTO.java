@@ -1,5 +1,6 @@
 package com.bagasari.sacbagaji.model.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,6 +20,11 @@ public class ProductDTO {
     private Long accountBookId;
     private String name;
     private Integer price;
+    @JsonFormat(
+            shape = JsonFormat.Shape.STRING,
+            pattern = "yyyy-MM-dd",
+            timezone = "Asia/Seoul"
+    )
     private LocalDate purchaseDate;
     private String detail;
     private String country;
