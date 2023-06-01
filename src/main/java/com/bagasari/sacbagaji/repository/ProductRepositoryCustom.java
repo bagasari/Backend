@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface ProductRepositoryCustom {
 
-    Slice<ProductDTO> findAllByNameOrderBySort(String keyword, Pageable pageable, Long lastId);
+    Slice<ProductDTO> findAllByNameAndLocationOrderBySort(String keyword, String location, Pageable pageable, Long lastId);
 
     List<String> findNameListOrderByProductNameAsc(String word);
 }
