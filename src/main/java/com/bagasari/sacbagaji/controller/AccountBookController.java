@@ -22,7 +22,6 @@ import java.util.List;
 public class AccountBookController {
 
     private final AccountBookService accountBookService;
-    private final ProductService productService;
 
     @PostMapping("/create")
     public ResponseEntity<String> create(@Auth AuthInfo authInfo, @Valid @RequestBody AccountRequestDTO accountRequestDto) {
