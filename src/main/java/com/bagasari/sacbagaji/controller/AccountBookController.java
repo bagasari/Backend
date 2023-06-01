@@ -8,6 +8,7 @@ import com.bagasari.sacbagaji.model.dto.res.AccountProductListResponseDTO;
 import com.bagasari.sacbagaji.security.Auth;
 import com.bagasari.sacbagaji.security.AuthInfo;
 import com.bagasari.sacbagaji.service.AccountBookService;
+import com.bagasari.sacbagaji.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +22,7 @@ import java.util.List;
 public class AccountBookController {
 
     private final AccountBookService accountBookService;
+    private final ProductService productService;
 
     @PostMapping("/create")
     public ResponseEntity<String> create(@Auth AuthInfo authInfo, @Valid @RequestBody AccountRequestDTO accountRequestDto) {
