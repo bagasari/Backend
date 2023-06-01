@@ -64,10 +64,18 @@ public class ProductService {
 
     @Transactional
     public AutoSearchWordListResponseDTO selectAutoSearchWordList(String word) {
-        log.info(word);
+
+        // 빈 문자열인 경우
+        if (word.isEmpty()) {
+            return new AutoSearchWordListResponseDTO();
+        }
+
         List<String> names = productRepository.findNameListOrderByProductNameAsc(word);
-        log.info(names.toString());
-        AutoSearchWordListResponseDTO result = new AutoSearchWordListResponseDTO(names);
-        return result;
+        // 일치하는 값이 없는 경우
+        if (names.size() == 0) {
+            return new AutoSearchWordListResponseDTO();
+        } else {
+            return new AutoSearchWordListResponseDTO(names);
+        }
     }
 }
