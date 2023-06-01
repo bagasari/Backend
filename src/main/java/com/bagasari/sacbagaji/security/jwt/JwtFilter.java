@@ -58,6 +58,7 @@ public class JwtFilter extends OncePerRequestFilter {
         if (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) {
             return bearerToken.substring(7);
         }
-        else throw new CustomException(ErrorCode.EMPTY_JWT_TOKEN);
+
+        return null;
     }
 }
