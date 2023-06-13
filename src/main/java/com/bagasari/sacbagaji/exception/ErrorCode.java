@@ -20,7 +20,7 @@ public enum ErrorCode {
     INVALID_ACCESS_ACCOUNT(400, "C002", "유저가 생성한 가계부가 아닙니다."),
     // 품목
     INVALID_PRODUCT_TYPE(400, "d001", "존재하지 않는 품목 타입입니다."),
-    NONEXISTENT_PRODUCT_ID(400, "d002", "존재하지 않는 품목"),
+    NONEXISTENT_PRODUCT_ID(400, "d002", "존재하지 않는 품목 ID"),
     PRODUCT_LIKE_EXISTS(400, "d003", "이미 좋아요한 품목입니다");
 
     private int status;

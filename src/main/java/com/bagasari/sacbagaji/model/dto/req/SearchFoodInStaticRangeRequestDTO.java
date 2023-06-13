@@ -1,4 +1,4 @@
-package com.bagasari.sacbagaji.model.dto;
+package com.bagasari.sacbagaji.model.dto.req;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,11 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
-public class FoodDTO {
+public class SearchFoodInStaticRangeRequestDTO {
 
-    private Integer count;
-    private Integer weight;
+    private String name;
     private String latitude;
     private String longitude;
-
 }
