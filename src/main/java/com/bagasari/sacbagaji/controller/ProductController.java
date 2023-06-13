@@ -2,7 +2,11 @@ package com.bagasari.sacbagaji.controller;
 
 import com.bagasari.sacbagaji.model.dto.ProductDTO;
 import com.bagasari.sacbagaji.model.dto.req.ProductLikeDTO;
+import com.bagasari.sacbagaji.model.dto.req.SearchFoodInDynamicRangeRequestDTO;
+import com.bagasari.sacbagaji.model.dto.req.SearchFoodInStaticRangeRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AutoSearchWordListResponseDTO;
+import com.bagasari.sacbagaji.model.dto.res.SearchFoodInDynamicRangeResponseDTO;
+import com.bagasari.sacbagaji.model.dto.res.SearchFoodInStaticRangeResponseDTO;
 import com.bagasari.sacbagaji.security.Auth;
 import com.bagasari.sacbagaji.security.AuthInfo;
 import com.bagasari.sacbagaji.service.ProductService;
@@ -15,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -59,4 +64,19 @@ public class ProductController {
         return ResponseEntity.ok(productService.selectAutoSearchWordList(word));
     }
 
+    /**
+     * 특정 품목 기준으로 범위 내의 food 반환
+     */
+    @PostMapping("/map/food/dynamic")
+    public ResponseEntity<List<List<SearchFoodInDynamicRangeResponseDTO>>> searchFoodInDynamicRange(@RequestBody SearchFoodInDynamicRangeRequestDTO dto) {
+        return ResponseEntity.ok(productService.searchFoodInDynamicRange(dto));
+    }
+
+    /**
+     * 특정 도시 중심범위 내의 food 반환
+     */
+    @PostMapping("/map/food/static")
+    public ResponseEntity<List<List<SearchFoodInStaticRangeResponseDTO>>> searchFoodInStaticRange(@RequestBody SearchFoodInStaticRangeRequestDTO dto) {
+        return ResponseEntity.ok(productService. searchFoodInStaticRange(dto));
+    }
 }
