@@ -133,16 +133,11 @@ public class ProductService {
 
     /**
      * 특정 도시 중심범위 내의 food 반환
+     * dto.name == null인 경우 전체 검색
      */
     @Transactional
     public List<List<SearchFoodInStaticRangeResponseDTO>> searchFoodInStaticRange(SearchFoodInStaticRangeRequestDTO dto) {
-        List<Food> foodList;
-        if(dto.getName().equals("")) {
-            foodList = foodRepository.findAll();
-        }
-        else {
-            foodList = foodRepository.findAllByNameContains(dto.getName());
-        }
+        List<Food> foodList = foodRepository.findAllByNameContains(dto.getName());
         List<List<SearchFoodInStaticRangeResponseDTO>> foodGrid = new ArrayList<>();
 
         for(int i=0; i<16; i++) {
