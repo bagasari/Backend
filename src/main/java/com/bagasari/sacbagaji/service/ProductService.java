@@ -136,7 +136,13 @@ public class ProductService {
      */
     @Transactional
     public List<List<SearchFoodInStaticRangeResponseDTO>> searchFoodInStaticRange(SearchFoodInStaticRangeRequestDTO dto) {
-        List<Food> foodList = foodRepository.findAllByNameContains(dto.getName());
+        List<Food> foodList;
+        if(dto.getName().equals("")) {
+            foodList = foodRepository.findAll();
+        }
+        else {
+            foodList = foodRepository.findAllByNameContains(dto.getName());
+        }
         List<List<SearchFoodInStaticRangeResponseDTO>> foodGrid = new ArrayList<>();
 
         for(int i=0; i<16; i++) {
