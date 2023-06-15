@@ -14,12 +14,12 @@ public class AccountRequestDTO {
     @NotBlank
     private String name;
 
-    private LocalDate startDate;
-    private LocalDate endDate;
+    private String startDate;
+    private String endDate;
     private Boolean isPrivate;
     private List<String> cityList;
 
-    public AccountRequestDTO(String name, LocalDate startDate, LocalDate endDate, Boolean isPrivate, List<String> cityList) {
+    public AccountRequestDTO(String name, String startDate, String endDate, Boolean isPrivate, List<String> cityList) {
         this.name = name;
         this.startDate = startDate;
         this.endDate = endDate;

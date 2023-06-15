@@ -20,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -40,12 +41,15 @@ public class AccountBookService {
 
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
 
+        LocalDate startDate = LocalDate.parse(accountRequestDTO.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endDate = LocalDate.parse(accountRequestDTO.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+
         // 가계부 생성
         AccountBook accountBook = AccountBook.builder()
                 .user(user)
                 .name(accountRequestDTO.getName())
-                .startDate(accountRequestDTO.getStartDate())
-                .endDate(accountRequestDTO.getEndDate())
+                .startDate(startDate)
+                .endDate(endDate)
                 .isPrivate(accountRequestDTO.getIsPrivate())
                 .totalPrice(0)
                 .build();
