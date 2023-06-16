@@ -200,6 +200,22 @@ public class AccountBookService {
         return new AccountProductListResponseDTO(accountBook, productListWithPurchaseDateDTOS);
     }
 
+    @Transactional
+    public void deleteAccountBook(AuthInfo authInfo, Long id) {
+
+        User user = userRepository.findByEmail(authInfo.getEmail()).get();
+
+        Optional<AccountBook> accountBookOptional = accountBookRepository.findById(id);
+
+        if (accountBookOptional.isEmpty()) {
+            throw new CustomException(ErrorCode.NONEXISTENT_ACCOUNT_ID);
+        } else if (user.getId() != accountBookOptional.get().getUser().getId()) {
+            throw new CustomException(ErrorCode.INVALID_ACCESS_ACCOUNT);
+        }
+
+        accountBookRepository.delete(accountBookOptional.get());
+    }
+
     private String getProductType(Product product) {
         if (product instanceof Food) {
             return "Food";

@@ -45,7 +45,7 @@ public class AccountBook {
     @Column(name = "update_time")
     private LocalDateTime updateTime;
 
-    @OneToMany(mappedBy = "accountBook")
+    @OneToMany(mappedBy = "accountBook", orphanRemoval = true)
     private List<Destination> destinations = new ArrayList<>();
 
     public void updateTotalPrice(AccountBook accountBook, Integer totalPrice) {
