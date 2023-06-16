@@ -42,7 +42,7 @@ public class AccountBookService {
         User user = userRepository.findByEmail(authInfo.getEmail()).get();
 
         LocalDate startDate = LocalDate.parse(accountRequestDTO.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
-        LocalDate endDate = LocalDate.parse(accountRequestDTO.getStartDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        LocalDate endDate = LocalDate.parse(accountRequestDTO.getEndDate(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         // 가계부 생성
         AccountBook accountBook = AccountBook.builder()
