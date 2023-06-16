@@ -8,7 +8,6 @@ import com.bagasari.sacbagaji.model.dto.res.AccountProductListResponseDTO;
 import com.bagasari.sacbagaji.security.Auth;
 import com.bagasari.sacbagaji.security.AuthInfo;
 import com.bagasari.sacbagaji.service.AccountBookService;
-import com.bagasari.sacbagaji.service.ProductService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -56,4 +55,9 @@ public class AccountBookController {
         return ResponseEntity.ok(accountBookService.findAccountProductList(authInfo, id));
     }
 
+    @GetMapping("/delete")
+    public ResponseEntity<String> deleteAccountBook(@Auth AuthInfo authInfo, @RequestParam(name = "accountId") Long id) {
+        accountBookService.deleteAccountBook(authInfo, id);
+        return ResponseEntity.ok("Account Book delete!!");
+    }
 }
