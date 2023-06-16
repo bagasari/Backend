@@ -52,7 +52,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                     p.getDetail(),
                     p.getCountry(),
                     p.getCity(),
-                    p.getLikeCount()
+                    p.getLikeCount(),
+                    p.getProductType(p)
             ));
         }
 

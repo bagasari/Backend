@@ -9,10 +9,7 @@ import com.bagasari.sacbagaji.model.dto.req.SearchFoodInStaticRangeRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AutoSearchWordListResponseDTO;
 import com.bagasari.sacbagaji.model.dto.res.SearchFoodInDynamicRangeResponseDTO;
 import com.bagasari.sacbagaji.model.dto.res.SearchFoodInStaticRangeResponseDTO;
-import com.bagasari.sacbagaji.model.entity.Food;
-import com.bagasari.sacbagaji.model.entity.Product;
-import com.bagasari.sacbagaji.model.entity.ProductLike;
-import com.bagasari.sacbagaji.model.entity.User;
+import com.bagasari.sacbagaji.model.entity.*;
 import com.bagasari.sacbagaji.repository.FoodRepository;
 import com.bagasari.sacbagaji.repository.ProductLikeRepository;
 import com.bagasari.sacbagaji.repository.ProductRepository;
@@ -119,7 +116,8 @@ public class ProductService {
                     food.getDetail(),
                     food.getCountry(),
                     food.getCity(),
-                    food.getLikeCount()
+                    food.getLikeCount(),
+                        "Food"
             ), new FoodDTO(
                     food.getCount(),
                     food.getWeight(),
@@ -162,7 +160,8 @@ public class ProductService {
                             food.getDetail(),
                             food.getCountry(),
                             food.getCity(),
-                            food.getLikeCount()
+                            food.getLikeCount(),
+                            "Food"
                     ), new FoodDTO(
                     food.getCount(),
                     food.getWeight(),

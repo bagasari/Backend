@@ -40,6 +40,17 @@ public abstract class Product {
     @OneToMany(mappedBy = "product", fetch = FetchType.LAZY)
     private List<ProductLike> productLikes = new ArrayList<>();
 
+    /**
+     * product type 가져오는 메서드
+     */
+    public String getProductType(Product product) {
+        if (product instanceof Food) {
+            return "Food";
+        } else {
+            return "Transportation";
+        }
+    }
+
     public Product(ProductDTO productDTO, AccountBook accountBook) {
         this.accountBook = accountBook;
         this.name = productDTO.getName();

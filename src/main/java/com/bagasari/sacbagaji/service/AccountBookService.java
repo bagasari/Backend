@@ -155,7 +155,7 @@ public class AccountBookService {
         // purchaseDate별로 product 분류
         for (Product product : products) {
             productsByPurchaseDate.computeIfAbsent(product.getPurchaseDate(), k -> new ArrayList<>())
-                    .add(new ProductDTO(product.getName(), product.getPrice()));
+                    .add(new ProductDTO(product.getName(), product.getPrice(), product.getCity(), product.getProductType(product)));
         }
 
         for (Map.Entry<LocalDate, List<ProductDTO>> entry : productsByPurchaseDate.entrySet()) {
@@ -190,7 +190,7 @@ public class AccountBookService {
         // purchaseDate별로 product 분류
         for (Product product : products) {
             productsByPurchaseDate.computeIfAbsent(product.getPurchaseDate(), k -> new ArrayList<>())
-                    .add(new ProductDTO(product.getName(), product.getPrice(), product.getCity(), getProductType(product)));
+                    .add(new ProductDTO(product.getName(), product.getPrice(), product.getCity(), product.getProductType(product)));
         }
 
         for (Map.Entry<LocalDate, List<ProductDTO>> entry : productsByPurchaseDate.entrySet()) {
@@ -214,16 +214,6 @@ public class AccountBookService {
         }
 
         accountBookRepository.delete(accountBookOptional.get());
-    }
-
-    private String getProductType(Product product) {
-        if (product instanceof Food) {
-            return "Food";
-        } else if (product instanceof Transportation) {
-            return "Transportation";
-        } else {
-            throw new CustomException(ErrorCode.INVALID_PRODUCT_TYPE);
-        }
     }
 }
 
