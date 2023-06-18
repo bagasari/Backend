@@ -1,8 +1,10 @@
 package com.bagasari.sacbagaji.repository;
 
 import com.bagasari.sacbagaji.model.dto.ProductDTO;
+import com.bagasari.sacbagaji.model.dto.res.SearchProductResponseDto;
 import com.bagasari.sacbagaji.model.entity.Product;
 import com.bagasari.sacbagaji.model.entity.QProduct;
+import com.bagasari.sacbagaji.model.entity.User;
 import com.bagasari.sacbagaji.util.QueryDslUtil;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -24,9 +26,10 @@ import static org.springframework.util.ObjectUtils.isEmpty;
 public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
     private final JPAQueryFactory queryFactory;
+    private final ProductLikeRepository productLikeRepository;
 
     //추천순, 최근순
-    public Slice<ProductDTO> findAllByNameAndLocationOrderBySort(String keyword, String location, Pageable pageable, Long lastId) {
+    public Slice<SearchProductResponseDto> findAllByNameAndLocationOrderBySort(User user, String keyword, String location, Pageable pageable, Long lastId) {
 
         List<OrderSpecifier> orderSpecifiers = getAllOrderSpecifiers(pageable);
 
@@ -40,20 +43,22 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
                 .orderBy(orderSpecifiers.toArray(OrderSpecifier[]::new))
                 .fetch();
 
-        List<ProductDTO> productDTOList = new ArrayList<>();
+        List<SearchProductResponseDto> productDTOList = new ArrayList<>();
 
         for(Product p: productList) {
-            productDTOList.add(new ProductDTO(
-                    p.getId(),
-                    p.getAccountBook().getId(),
-                    p.getName(),
-                    p.getPrice(),
-                    p.getPurchaseDate(),
-                    p.getDetail(),
-                    p.getCountry(),
-                    p.getCity(),
-                    p.getLikeCount(),
-                    p.getProductType(p)
+            productDTOList.add(new SearchProductResponseDto(
+                    new ProductDTO(
+                        p.getId(),
+                        p.getAccountBook().getId(),
+                        p.getName(),
+                        p.getPrice(),
+                        p.getPurchaseDate(),
+                        p.getDetail(),
+                        p.getCountry(),
+                        p.getCity(),
+                        p.getLikeCount(),
+                        p.getProductType(p)
+                    ), productLikeRepository.existsByUserAndProduct(user, p)
             ));
         }
 
