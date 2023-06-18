@@ -13,5 +13,6 @@ public class SearchFoodInDynamicRangeResponseDTO {
 
     private ProductDTO product;
     private FoodDTO food;
+    private Boolean isLike;
 
 }

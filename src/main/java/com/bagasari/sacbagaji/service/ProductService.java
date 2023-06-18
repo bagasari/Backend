@@ -9,6 +9,7 @@ import com.bagasari.sacbagaji.model.dto.req.SearchFoodInStaticRangeRequestDTO;
 import com.bagasari.sacbagaji.model.dto.res.AutoSearchWordListResponseDTO;
 import com.bagasari.sacbagaji.model.dto.res.SearchFoodInDynamicRangeResponseDTO;
 import com.bagasari.sacbagaji.model.dto.res.SearchFoodInStaticRangeResponseDTO;
+import com.bagasari.sacbagaji.model.dto.res.SearchProductResponseDto;
 import com.bagasari.sacbagaji.model.entity.*;
 import com.bagasari.sacbagaji.repository.FoodRepository;
 import com.bagasari.sacbagaji.repository.ProductLikeRepository;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -35,8 +37,10 @@ public class ProductService {
     private final FoodRepository foodRepository;
 
     @Transactional
-    public Slice<ProductDTO> searchProduct(String keyword, String location, Pageable pageable, Long lastId) {
-        return productRepository.findAllByNameAndLocationOrderBySort(keyword, location, pageable, lastId);
+    public Slice<SearchProductResponseDto> searchProduct(String email, String keyword, String location, Pageable pageable, Long lastId) {
+        return productRepository.findAllByNameAndLocationOrderBySort(
+                userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.BAD_CREDENTIAL_NONEXISTENT_ID)), keyword, location, pageable, lastId
+        );
     }
 
     @Transactional
@@ -89,7 +93,8 @@ public class ProductService {
      * 특정 품목 기준으로 범위 내의 food 반환
      */
     @Transactional
-    public List<List<SearchFoodInDynamicRangeResponseDTO>> searchFoodInDynamicRange(SearchFoodInDynamicRangeRequestDTO dto) {
+    public List<List<SearchFoodInDynamicRangeResponseDTO>> searchFoodInDynamicRange(String email, SearchFoodInDynamicRangeRequestDTO dto) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.BAD_CREDENTIAL_NONEXISTENT_ID));
         Food targetFood = foodRepository.findById(dto.getId()).orElseThrow(()-> new CustomException(ErrorCode.NONEXISTENT_PRODUCT_ID));
         List<Food> foodList = foodRepository.findAllByName(dto.getName());
         List<List<SearchFoodInDynamicRangeResponseDTO>> foodGrid = new ArrayList<>();
@@ -102,6 +107,7 @@ public class ProductService {
         double lon = Double.parseDouble(targetFood.getLongitude());
 
         for (Food food : foodList) {
+            Product product = productRepository.findById(food.getId()).orElseThrow(()-> new CustomException(ErrorCode.NONEXISTENT_PRODUCT_ID));
             double foodLat = Double.parseDouble(food.getLatitude());
             double foodLon = Double.parseDouble(food.getLongitude());
             int sector = getSector(lat, lon, foodLat, foodLon);
@@ -123,7 +129,7 @@ public class ProductService {
                     food.getWeight(),
                     food.getLatitude(),
                     food.getLongitude()
-            )));
+            ), productLikeRepository.existsByUserAndProduct(user, product)));
         }
 
         return foodGrid;
@@ -134,7 +140,8 @@ public class ProductService {
      * dto.name == null인 경우 전체 검색
      */
     @Transactional
-    public List<List<SearchFoodInStaticRangeResponseDTO>> searchFoodInStaticRange(SearchFoodInStaticRangeRequestDTO dto) {
+    public List<List<SearchFoodInStaticRangeResponseDTO>> searchFoodInStaticRange(String email, SearchFoodInStaticRangeRequestDTO dto) {
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new CustomException(ErrorCode.BAD_CREDENTIAL_NONEXISTENT_ID));
         List<Food> foodList = foodRepository.findAllByNameContains(dto.getName());
         List<List<SearchFoodInStaticRangeResponseDTO>> foodGrid = new ArrayList<>();
 
@@ -146,6 +153,7 @@ public class ProductService {
         double lon = Double.parseDouble(dto.getLongitude());
 
         for (Food food : foodList) {
+            Product product = productRepository.findById(food.getId()).orElseThrow(()-> new CustomException(ErrorCode.NONEXISTENT_PRODUCT_ID));
             double foodLat = Double.parseDouble(food.getLatitude());
             double foodLon = Double.parseDouble(food.getLongitude());
             int sector = getSector(lat, lon, foodLat, foodLon);
@@ -167,7 +175,7 @@ public class ProductService {
                     food.getWeight(),
                     food.getLatitude(),
                     food.getLongitude()
-            )));
+            ), productLikeRepository.existsByUserAndProduct(user, product)));
         }
 
         return foodGrid;
