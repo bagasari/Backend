@@ -114,7 +114,7 @@ public class ProductService {
             if(sector==-1) continue;
             foodGrid.get(sector).add(new SearchFoodInDynamicRangeResponseDTO(
                 new ProductDTO(
-                    null,
+                    food.getId(),
                     food.getAccountBook().getId(),
                     food.getName(),
                     food.getPrice(),
@@ -160,7 +160,7 @@ public class ProductService {
             if(sector==-1) continue;
             foodGrid.get(sector).add(new SearchFoodInStaticRangeResponseDTO(
                     new ProductDTO(
-                            null,
+                            food.getId(),
                             food.getAccountBook().getId(),
                             food.getName(),
                             food.getPrice(),
